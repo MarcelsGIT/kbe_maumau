@@ -6,33 +6,51 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+
 
 import cardGame.MauMauService;
 import cardGame.management.MauMauMgmt;
 import cardGame.modell.MauMau;
+import cards.CardDeckService;
+import cards.management.CardDeckImpl;
 import cards.modell.Card;
 import cards.modell.CardDeck;
 import cards.modell.Symbol;
 import cards.modell.Value;
+import rules.RulesService;
 import rules.modell.MauMauRules;
+import userAdministration.UserService;
 import userAdministration.modell.MauMauUser;
 
 public class CardGameTest {
 
 	private static MauMau maumau;
-	private static MauMauService mauMauMgmt;
+	private static MauMauService mauMauService;
 	private static MauMauUser mauMauUser1;
 	private static MauMauUser mauMauUser2;
+	
+	private static CardDeckService cardDeckService;
+	private static RulesService ruleService;
+	private static UserService userService;
+	
+	private static CardDeck cardDeck;
+	private static CardDeck graveyard;
 	
 	@BeforeAll
 	public static void init() {
 		maumau = new MauMau(null, null, null, null, 0, false, null, 0, null);
-		mauMauMgmt = new MauMauMgmt();
+		mauMauService = new MauMauMgmt();
+		cardDeck= new CardDeck();
+		graveyard = new CardDeck();
+		
+
 		
 		List<Card> cards = new LinkedList<Card>();
 		cards.add(new Card(Symbol.CLUB, Value.NINE));
@@ -44,7 +62,8 @@ public class CardGameTest {
 		cards.add(new Card(Symbol.HEART, Value.JACK));
 		cards.add(new Card(Symbol.SPADE, Value.QUEEN));
 		cards.add(new Card(Symbol.DIAMOND, Value.TEN));
-		CardDeck cardDeck = new CardDeck(cards);
+		cardDeck.setCards(cards);
+		graveyard.setCards(new LinkedList<Card>());
 		
 		maumau.setDeck(cardDeck);
 		maumau.setGraveyard(new CardDeck());
@@ -64,21 +83,21 @@ public class CardGameTest {
 	
 	@Test
 	public void testPositiveChooseWhoStarts() {
-		mauMauMgmt.chooseWhoStarts(maumau);
+		mauMauService.chooseWhoStarts(maumau);
 		assertEquals(maumau.getCurrentPlayer(), maumau.getPlayers().get(0));
 	}
 	
 	@Test
 	public void testPositiveNextPlayer() {
 		maumau.setCurrentPlayer(maumau.getPlayers().get(0));
-		maumau = mauMauMgmt.nextPlayer(maumau);
+		maumau = mauMauService.nextPlayer(maumau);
 		assertEquals(maumau.getCurrentPlayerIndex(),1);	
 		}
 	
 	@Test
 	public void testNextPlayerStartUserListAgain() {
 		maumau.setCurrentPlayer(maumau.getPlayers().get(maumau.getPlayers().size()-1));
-		maumau = mauMauMgmt.nextPlayer(maumau);
+		maumau = mauMauService.nextPlayer(maumau);
 		assertEquals(maumau.getCurrentPlayerIndex(),0);
 	}
 	
@@ -86,7 +105,7 @@ public class CardGameTest {
 	public void testPositiveEndGame() {
 		boolean endGame = true;
 		maumau.setEndGame(endGame);
-		maumau = mauMauMgmt.endGame(maumau, endGame);
+		maumau = mauMauService.endGame(maumau, endGame);
 		assertTrue(maumau.isEndGame());
 	}
 	
@@ -99,17 +118,47 @@ public class CardGameTest {
 	@Test
 	public void testSkipRoundForWrongUser() {
 		maumau.setCurrentPlayer(mauMauUser1);
-		mauMauMgmt.skipRound(mauMauUser2, maumau);
+		mauMauService.skipRound(mauMauUser2, maumau);
 		assertTrue(maumau.getCurrentPlayer() != mauMauUser2);
 	}
 	
 	@Test
 	public void testDealPenaltyCardsIsValid() {
 		try {
-			mauMauMgmt.dealPenaltyCards(4, maumau);
+			mauMauService.dealPenaltyCards(4, maumau);
 		} catch(Exception e) {
 			fail("Penalty cards could not be dealt. " + e.getStackTrace());
 		}
 	}
+	
+//	@Test
+//	public void testDealCardsToPlayers() {
+//		//CardDeckService cardDeckService = mock(CardDeckService.class);
+//		LinkedList <Card>cardsForUsers = new LinkedList<Card>();
+//		cardsForUsers.add(new Card(Symbol.CLUB, Value.NINE));
+//		cardsForUsers.add(new Card(Symbol.SPADE, Value.KING));
+//		cardsForUsers.add(new Card(Symbol.HEART, Value.ACE));
+//		cardsForUsers.add(new Card(Symbol.DIAMOND, Value.SEVEN));
+//		cardsForUsers.add(new Card(Symbol.CLUB, Value.EIGHT));
+//		 cardDeckService = mock(CardDeckService.class);
+//		 when(cardDeckService.dealCards(cardDeck, 5, graveyard)).thenReturn(cardsForUsers);
+//		ruleService = mock(RulesService.class);
+//		 userService = mock(UserService.class);
+//		//mauMauService.setServices(cardDeckService, userService, ruleService);
+//
+//
+////		List <Card> cards = cardDeckService.dealCards(cardDeck, 5, graveyard);
+////		for(Card card :cards) {
+////			System.out.println(card.getSymbol());
+////		}
+//		maumau = mauMauService.dealCardsToPlayers(maumau, 5, cardDeckService);
+//		for (MauMauUser user : maumau.getPlayers()) {
+//			System.out.println(user.getHand().size());
+//			assertEquals(5, user.getHand().size());
+//		}
+//	}
+	
+	
+	
 
 }

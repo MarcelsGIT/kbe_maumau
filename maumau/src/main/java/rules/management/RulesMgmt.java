@@ -86,15 +86,12 @@ public class RulesMgmt implements RulesService {
 		}	
 	}
 
-	public boolean checkIfUserCanPlay(MauMau maumau, MauMauRules rules, Card lastCard) {
-		int amountSeven = maumau.getAmountSeven();
-		List<Card> userCards = maumau.getCurrentPlayer().getHand();
-		Symbol userwish = maumau.getUserwish();
+	public boolean checkIfUserCanPlay(int amountSeven, MauMauRules rules, Card lastCard, List<Card> userCards, Symbol userWish) {
 		boolean canPlay = false;
 		if (isSeven(lastCard, rules) && amountSeven>0) {
 			canPlay = checkIfUserHasSeven(userCards);
 		} else if (isBube(lastCard, rules)) {
-			canPlay = checkIfUserHasWishedSymbol(userCards, userwish);
+			canPlay = checkIfUserHasWishedSymbol(userCards, userWish);
 		} else {
 			canPlay = checkIfUserHasFittingCard(userCards, lastCard, rules);
 		}
@@ -133,6 +130,7 @@ public class RulesMgmt implements RulesService {
 		return hasFittingCard;
 	}
 	
+	
 	public boolean checkIfSpecialCard(Card card) {
 		if(card.getValue()==Value.EIGHT || card.getValue()==Value.SEVEN|| card.getValue()==Value.JACK) {
 			return true;
@@ -141,6 +139,16 @@ public class RulesMgmt implements RulesService {
 		}
 	}
 	
+	
+	public boolean validCardOrNotValidCard(Card mostRecentCard, Card card, Symbol userwish, MauMauRules mauMauRules) {
+		boolean valid = false;
+		if (isBube(mostRecentCard, mauMauRules)) {
+			valid = checkIfUserWishFulfilled(card, userwish);
+		} else {
+			valid = checkIsValid(mostRecentCard, card, mauMauRules);
+		}
+		return valid;
+	}
 	
 
 	

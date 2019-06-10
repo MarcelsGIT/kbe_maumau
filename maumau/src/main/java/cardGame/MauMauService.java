@@ -7,6 +7,7 @@ import cards.modell.Card;
 import cards.modell.CardDeck;
 import cards.CardDeckService;
 import cards.modell.Symbol;
+import rules.RulesService;
 import rules.modell.MauMauRules;
 import userAdministration.modell.MauMauUser;
 import userAdministration.UserService;
@@ -22,7 +23,7 @@ public interface MauMauService {
 	 * @param graveyard The empty card deck
 	 * @return The newly started game
 	 */
-	void startGame(List<MauMauUser> userList, CardDeck cardDeck, CardDeck graveyard, MauMauRules rules,
+	MauMau startGame(List<MauMauUser> userList, CardDeck cardDeck, CardDeck graveyard, MauMauRules rules,
 			int currentPlayerIndex, boolean endGame, MauMauUser winner, int amountSeven, Symbol userwish, MauMau mauMau);
 	
 	
@@ -72,10 +73,84 @@ public interface MauMauService {
 	 * @return The user's new hand 
 	 */
 	List<Card> dealPenaltyCards(int amount, MauMau mauMau);
+	
+	
+	
+	////Ab hier Tests!
 
+	
+	
+	/**
+	 * Deals Cards to players
+	 * @param maumau
+	 * @param amountCards
+	 * @param cardDeckService
+	 * @return maumau
+	 */
 	MauMau dealCardsToPlayers(MauMau maumau, int amountCards, CardDeckService cardDeckService);
 	
+	
+	
+	/**
+	 * Gives a card to the user
+	 * @param maumau
+	 * @param cardDeckService
+	 * @param userService
+	 * @return MauMau
+	 */
 	MauMau giveCardToUser(MauMau maumau, CardDeckService cardDeckService, UserService userService);
+	
+	/**
+	 * Gives the amount of cards to the user that the user has to take
+	 * @param maumau
+	 * @param cardDeckService
+	 * @param userService
+	 * @return MauMau
+	 */
+	MauMau handleUserHasToTakeCards(MauMau maumau, CardDeckService cardDeckService, UserService userService);
+	
+	/**
+	 * Takes the card the user played and removes it from userhand
+	 * @param maumau
+	 * @param cardDeckService
+	 * @param validCard
+	 * @return MauMau
+	 */
+	MauMau playCardProcedure(MauMau maumau, CardDeckService cardDeckService, Card validCard);
+	
+	
+	/**
+	 *Sets mau or not depending on boolean mau
+	 * @param maumau
+	 * @param mau
+	 * @return maumau
+	 */
+	MauMau shoutMauProcedure(MauMau maumau, boolean mau);
+	
+	/**
+	 * Sets mauMau or not depending on boolean shoutMaumau
+	 * @param maumau
+	 * @param shoutMaumau
+	 * @return Maumau
+	 */
+	MauMau shoutMauMauProcedure(MauMau maumau, boolean shoutMaumau);
+	
+	
+	
+	/**
+	 * Prepares Users, userHands, CardDeck, graveYard and rules for the game
+	 * @param userNames
+	 * @param userService
+	 * @param cardDeckService
+	 * @param rules
+	 * @param rulesService
+	 * @return MauMau
+	 */
+	MauMau handleGameStart(List<String> userNames, UserService userService, CardDeckService cardDeckService, MauMauRules rules, RulesService rulesService);
+
+
+	//void setServices(CardDeckService cardDeckService, UserService userService, RulesService rulesService);
+	
 	
 
 }

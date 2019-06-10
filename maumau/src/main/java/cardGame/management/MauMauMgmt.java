@@ -3,6 +3,7 @@ package cardGame.management;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cardGame.MauMauService;
@@ -11,6 +12,8 @@ import cards.CardDeckService;
 import cards.modell.Card;
 import cards.modell.CardDeck;
 import cards.modell.Symbol;
+import cards.modell.Value;
+import rules.RulesService;
 import rules.modell.MauMauRules;
 import userAdministration.UserService;
 import userAdministration.modell.MauMauUser;
@@ -18,8 +21,21 @@ import userAdministration.modell.MauMauUser;
 @Component
 public class MauMauMgmt implements MauMauService {
 
-	// Kaan
-		public void startGame(List<MauMauUser> userList, CardDeck cardDeck, CardDeck graveyard, MauMauRules rules,
+
+//private CardDeckService cardDeckService;
+//private UserService userService;
+//private RulesService rulesService;
+//
+//@Autowired
+//public void setServices(CardDeckService cardDeckService, UserService userService, RulesService rulesService) {
+//	this.cardDeckService = cardDeckService;
+//	this.rulesService=rulesService;
+//	this.userService= userService;
+//}
+	
+	
+
+		public MauMau startGame(List<MauMauUser> userList, CardDeck cardDeck, CardDeck graveyard, MauMauRules rules,
 				int currentPlayerIndex, boolean endGame, MauMauUser winner, int amountSeven, Symbol userwish, MauMau mauMau) {
 			mauMau.setPlayers(userList);
 			mauMau.setDeck(cardDeck);
@@ -29,7 +45,7 @@ public class MauMauMgmt implements MauMauService {
 			mauMau.setWinner(winner);
 			mauMau.setAmountSeven(amountSeven);
 			mauMau.setUserwish(userwish);
-			
+			return mauMau;
 		}
 
 		// Kaan
@@ -119,4 +135,78 @@ public class MauMauMgmt implements MauMauService {
 			return maumau;
 		}
 
+		
+		public MauMau handleUserHasToTakeCards(MauMau maumau, CardDeckService cardDeckService, UserService userService) {
+			if (maumau.getAmountSeven() > 0) {
+				for (int i = 0; i < 2 * maumau.getAmountSeven(); i++) {
+					maumau = giveCardToUser(maumau, cardDeckService, userService);
+				}
+			} else {
+				maumau = giveCardToUser(maumau, cardDeckService, userService);
+			}
+			maumau.setAmountSeven(0);
+			return maumau;
+		}
+		
+		
+		
+		public MauMau playCardProcedure(MauMau maumau, CardDeckService cardDeckService, Card validCard) {
+			maumau.getGraveyard().getCards().add(validCard);
+			maumau.getCurrentPlayer()
+					.setHand(cardDeckService.removeCardFromCardDeckList(maumau.getCurrentPlayer().getHand(), validCard));
+			return maumau;
+		}
+		
+		public MauMau shoutMauProcedure(MauMau maumau, boolean mau) {
+			if (mau) {
+				maumau.getCurrentPlayer().setMau(true);
+			} else {
+				maumau.getCurrentPlayer().setMau(false);
+			}
+			return maumau;
+		}
+		
+		public MauMau shoutMauMauProcedure(MauMau maumau, boolean shoutMaumau) {
+			if (shoutMaumau) {
+				maumau.getCurrentPlayer().setMaumau(true);
+			} else {
+				maumau.getCurrentPlayer().setMaumau(false);
+			}
+			return maumau;
+		}
+		
+		
+		
+		public MauMau handleGameStart(List<String> userNames, UserService userService, CardDeckService cardDeckService, MauMauRules rules, RulesService rulesService) {
+
+			List<MauMauUser> users = userService.createUsers(userNames);
+			CardDeck gameCardDeck = cardDeckService.createCardDeck(cardDeckService.createCards());
+
+			List<Card> shuffledGameCards = cardDeckService.shuffle(gameCardDeck);
+			Card firstGraveyardCard = shuffledGameCards.get(0);
+
+			while (rulesService.checkIfSpecialCard(firstGraveyardCard)) {
+				shuffledGameCards = cardDeckService.shuffle(gameCardDeck);
+				firstGraveyardCard = shuffledGameCards.get(0);
+			}
+
+			shuffledGameCards.remove(0);
+			List<Card> graveyardCards = new LinkedList<Card>();
+			graveyardCards.add(firstGraveyardCard);
+			MauMau maumau = new MauMau();
+			maumau = startGame(users, gameCardDeck, new CardDeck(graveyardCards), rules, 0, false, null, 0, null,
+					maumau);
+			maumau.setEndGame(false);
+			maumau = dealCardsToPlayers(maumau, 5, cardDeckService);
+			maumau = chooseWhoStarts(maumau);
+			
+			return maumau;
+		}
+
+
+		
+		
+		
+		
+		
 }

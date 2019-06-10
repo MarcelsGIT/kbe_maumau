@@ -25,7 +25,7 @@ public class CardDeckTest {
 	private static int amount;
 	private List<Card> cards;
 	private CardDeck graveyard;
-	private static CardDeckService cardDeckImpl;
+	private static CardDeckService cardDeckService;
 
 	@BeforeAll
 	public static void init() {
@@ -33,7 +33,7 @@ public class CardDeckTest {
 				new Card(Symbol.HEART, Value.KING) };
 		card = new Card(Symbol.DIAMOND, Value.NINE);
 		amount = 3;
-		cardDeckImpl = new CardDeckImpl();
+		cardDeckService = new CardDeckImpl();
 
 	}
 
@@ -50,25 +50,25 @@ public class CardDeckTest {
 
 	@Test
 	void testSaveCardArrayToCardDeck() {
-		cardDeck = cardDeckImpl.saveCardToCardDeck(cardDeck, cardsToSave);
+		cardDeck = cardDeckService.saveCardToCardDeck(cardDeck, cardsToSave);
 		assertEquals(7, cardDeck.getCards().size());
 	}
 
 	@Test
 	void testSaveSingleCardToCardDeck() {
-		cardDeckImpl.saveCardToCardDeck(cardDeck, card);
+		cardDeckService.saveCardToCardDeck(cardDeck, card);
 		assertEquals(5, cardDeck.getCards().size());
 	}
 
 	@Test
 	void testDealCards() {
-		cardDeckImpl.dealCards(cardDeck, amount, graveyard);
+		cardDeckService.dealCards(cardDeck, amount, graveyard);
 		assertEquals(cardDeck.getCards().size(), graveyard.getCards().size());
 	}
 
 	@Test
 	void testDealCardsCardDeckNotHavingEnoughCards() {
-		cardDeckImpl.dealCards(cardDeck, cardDeck.getCards().size() + 1, graveyard);
+		cardDeckService.dealCards(cardDeck, cardDeck.getCards().size() + 1, graveyard);
 		assertEquals(cardDeck.getCards().size(), graveyard.getCards().size());
 	}
 	/*
@@ -88,7 +88,7 @@ public class CardDeckTest {
 	
 	@Test
 	void testGiveCard() {
-		Card givenCard = cardDeckImpl.giveCard(cardDeck, graveyard);
+		Card givenCard = cardDeckService.giveCard(cardDeck, graveyard);
 		assertEquals(cardDeck.getCards().get(0), givenCard);	
 	}
 	
@@ -97,14 +97,14 @@ public class CardDeckTest {
 	void testGiveCardNotHavingEnoughCards() {
 		List<Card> emptyList = new LinkedList<Card>();
 		cardDeck.setCards(emptyList);
-		Card givenCard = cardDeckImpl.giveCard(cardDeck, graveyard);
+		Card givenCard = cardDeckService.giveCard(cardDeck, graveyard);
 		assertEquals(givenCard.getValue(), graveyard.getCards().get(0).getValue());
 	}
 	
 	@Test
 	void testGiveMostRecentCard() {
 		Card lastCard = cardDeck.getCards().get(cardDeck.getCards().size()-1);
-		Card givenCard = cardDeckImpl.giveMostRecentCard(cardDeck);
+		Card givenCard = cardDeckService.giveMostRecentCard(cardDeck);
 		assertEquals(lastCard.getValue(), givenCard.getValue());	
 	}
 	
@@ -112,21 +112,21 @@ public class CardDeckTest {
 	void addCardsFromGraveyard() {
 	List <Card> emptyCardList = new LinkedList <Card>();
 	cardDeck.setCards(emptyCardList);
-	CardDeck cardDeckWithGraveyardCards = cardDeckImpl.addCardsFromGraveyard(cardDeck, graveyard);
+	CardDeck cardDeckWithGraveyardCards = cardDeckService.addCardsFromGraveyard(cardDeck, graveyard);
 	assertEquals(cardDeckWithGraveyardCards.getCards().get(0), graveyard.getCards().get(0));
 	
 	}
 	
 	@Test
 	void testRemoveCardsFromCardDeckList() {
-		CardDeck cardDeckWithoutCards = cardDeckImpl.removeCardsFromCardDeckList(cardDeck, cards);
+		CardDeck cardDeckWithoutCards = cardDeckService.removeCardsFromCardDeckList(cardDeck, cards);
 		assertEquals(0, cardDeckWithoutCards.getCards().size());
 	}
 	
 	@Test
 	void testRemoveCardFromCardDeckList() {
 		int sizeBefore = cards.size();
-		List<Card> cardListWithoutCard = cardDeckImpl.removeCardFromCardDeckList(cards,new Card(Symbol.CLUB, Value.NINE));
+		List<Card> cardListWithoutCard = cardDeckService.removeCardFromCardDeckList(cards,new Card(Symbol.CLUB, Value.NINE));
 		assertEquals(sizeBefore-1, cardListWithoutCard.size());
 	}
 
