@@ -1,6 +1,0 @@
-cardGameUser/modell/test/CardGameUserTest.class
-rules/modell/test/RulesTest.class
-view/test/UserCommunicationTest.class
-view/test/UserInputValidationTest.class
-cardGame/modell/test/CardGameTest.class
-carddeck/modell/test/CardDeckTest.class
