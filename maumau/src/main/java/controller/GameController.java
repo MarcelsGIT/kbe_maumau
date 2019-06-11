@@ -207,6 +207,7 @@ public class GameController implements GameUI {
 		}
 		return card;
 	}
+	
 
 	public MauMau handleMauAndMauMauProcedure(MauMau maumau, RulesService ruleService) {
 		boolean mauPossible = ruleService.checkShoutMauPossible(this.maumau.getCurrentPlayer(), this.maumau.getRuleSet());
