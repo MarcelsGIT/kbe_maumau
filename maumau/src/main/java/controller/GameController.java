@@ -59,7 +59,7 @@ public class GameController implements GameUI {
 		do {
 			welcomeGame.welcomeMsg();
 			List<String> userNames = welcomeGame.askUserNames(welcomeGame.askHowManyUsers());
-			this.maumau = mauMauService.handleGameStart(userNames, userService, cardDeckService, rules, mauMauRules);
+			this.maumau = mauMauService.handleGameStart(userNames, rules);
 
 			while (this.maumau.isEndGame() == false) {
 
@@ -71,7 +71,7 @@ public class GameController implements GameUI {
 				if (!rulesService.checkIfUserCanPlay(maumau.getAmountSeven(), rules, lastCard,
 						maumau.getCurrentPlayer().getHand(), maumau.getUserwish())) {
 					userInformation.informAboutCardsThatWereTaken(this.maumau.getAmountSeven());
-					mauMauService.handleUserHasToTakeCards(this.maumau, cardDeckService, userService);
+					mauMauService.handleUserHasToTakeCards(this.maumau);
 					this.maumau = mauMauService.nextPlayer(this.maumau);
 
 				} else {
@@ -86,10 +86,10 @@ public class GameController implements GameUI {
 					userInformation.giveCurrentCardDeckInfo(this.maumau.getCurrentPlayer().getHand());
 					String playOrTake = userCommunication.askIfPlayCardOrTakeCard();
 					if (playOrTake.equalsIgnoreCase("t")) {
-						maumau = mauMauService.handleUserHasToTakeCards(maumau, cardDeckService, userService);
+						maumau = mauMauService.handleUserHasToTakeCards(maumau);
 					} else {
 						Card validCard = getValidCard(maumau, lastCard, maumau.getRuleSet(), rulesService);
-						maumau = mauMauService.playCardProcedure(maumau,  cardDeckService, validCard);
+						maumau = mauMauService.playCardProcedure(maumau, validCard);
 					}
 
 					// Checks if the user has won:

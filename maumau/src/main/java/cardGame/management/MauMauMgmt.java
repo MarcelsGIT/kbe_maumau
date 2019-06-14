@@ -9,22 +9,25 @@ import org.springframework.stereotype.Component;
 import cardGame.MauMauService;
 import cardGame.modell.MauMau;
 import cards.CardDeckService;
+import cards.management.CardDeckImpl;
 import cards.modell.Card;
 import cards.modell.CardDeck;
 import cards.modell.Symbol;
 import cards.modell.Value;
 import rules.RulesService;
+import rules.management.RulesMgmt;
 import rules.modell.MauMauRules;
 import userAdministration.UserService;
+import userAdministration.management.UserMgmt;
 import userAdministration.modell.MauMauUser;
 
 @Component
 public class MauMauMgmt implements MauMauService {
 
 
-//private CardDeckService cardDeckService;
-//private UserService userService;
-//private RulesService rulesService;
+private CardDeckService cardDeckService;
+private UserService userService;
+private RulesService rulesService;
 //
 //@Autowired
 //public void setServices(CardDeckService cardDeckService, UserService userService, RulesService rulesService) {
@@ -108,7 +111,7 @@ public class MauMauMgmt implements MauMauService {
 			return deal;
 		}
 
-		public MauMau dealCardsToPlayers(MauMau maumau, int amountCards, CardDeckService cardDeckService) {
+		public MauMau dealCardsToPlayers(MauMau maumau, int amountCard) {
 			List<MauMauUser> userList = maumau.getPlayers();
 			CardDeck cardDeck = maumau.getDeck();
 			CardDeck graveyard = maumau.getGraveyard();
@@ -126,7 +129,7 @@ public class MauMauMgmt implements MauMauService {
 			return maumau;
 		}
 
-		public MauMau giveCardToUser(MauMau maumau, CardDeckService cardDeckService, UserService userService) {
+		public MauMau giveCardToUser(MauMau maumau) {
 			CardDeck cardDeck = maumau.getDeck();
 			Card card = cardDeckService.giveCard(maumau.getDeck(), maumau.getGraveyard());
 			cardDeck.setCards(cardDeckService.removeCardFromCardDeckList(cardDeck.getCards(), card));
@@ -136,13 +139,13 @@ public class MauMauMgmt implements MauMauService {
 		}
 
 		
-		public MauMau handleUserHasToTakeCards(MauMau maumau, CardDeckService cardDeckService, UserService userService) {
+		public MauMau handleUserHasToTakeCards(MauMau maumau) {
 			if (maumau.getAmountSeven() > 0) {
 				for (int i = 0; i < 2 * maumau.getAmountSeven(); i++) {
-					maumau = giveCardToUser(maumau, cardDeckService, userService);
+					maumau = giveCardToUser(maumau);
 				}
 			} else {
-				maumau = giveCardToUser(maumau, cardDeckService, userService);
+				maumau = giveCardToUser(maumau);
 			}
 			maumau.setAmountSeven(0);
 			return maumau;
@@ -150,7 +153,7 @@ public class MauMauMgmt implements MauMauService {
 		
 		
 		
-		public MauMau playCardProcedure(MauMau maumau, CardDeckService cardDeckService, Card validCard) {
+		public MauMau playCardProcedure(MauMau maumau, Card validCard) {
 			maumau.getGraveyard().getCards().add(validCard);
 			maumau.getCurrentPlayer()
 					.setHand(cardDeckService.removeCardFromCardDeckList(maumau.getCurrentPlayer().getHand(), validCard));
@@ -177,8 +180,10 @@ public class MauMauMgmt implements MauMauService {
 		
 		
 		
-		public MauMau handleGameStart(List<String> userNames, UserService userService, CardDeckService cardDeckService, MauMauRules rules, RulesService rulesService) {
-
+		public MauMau handleGameStart(List<String> userNames, MauMauRules rules) {
+			this.cardDeckService = new CardDeckImpl();
+			this.userService = new UserMgmt();
+			this.rulesService = new RulesMgmt();
 			List<MauMauUser> users = userService.createUsers(userNames);
 			CardDeck gameCardDeck = cardDeckService.createCardDeck(cardDeckService.createCards());
 
@@ -197,7 +202,7 @@ public class MauMauMgmt implements MauMauService {
 			maumau = startGame(users, gameCardDeck, new CardDeck(graveyardCards), rules, 0, false, null, 0, null,
 					maumau);
 			maumau.setEndGame(false);
-			maumau = dealCardsToPlayers(maumau, 5, cardDeckService);
+			maumau = dealCardsToPlayers(maumau, 5);
 			maumau = chooseWhoStarts(maumau);
 			
 			return maumau;

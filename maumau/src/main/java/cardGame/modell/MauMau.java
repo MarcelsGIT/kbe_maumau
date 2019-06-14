@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import cards.CardDeckService;
 import cards.modell.CardDeck;
 import cards.modell.Symbol;
+import rules.RulesService;
 import rules.modell.MauMauRules;
+import userAdministration.UserService;
 import userAdministration.modell.MauMauUser;
 
 @Component
@@ -116,4 +119,13 @@ public class MauMau {
 	public void setCurrentPlayer(MauMauUser player) {
 		this.currentPlayerIndex = this.players.indexOf(player);
 	}
+
+	public boolean isPenaltyTime() {
+		return penaltyTime;
+	}
+
+	public void setPenaltyTime(boolean penaltyTime) {
+		this.penaltyTime = penaltyTime;
+	}
+	
 }
