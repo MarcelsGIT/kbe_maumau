@@ -23,5 +23,6 @@ cards\CardDeckService.class
 main\App.class
 userAdministration\modell\MauMauUser.class
 cards\management\CardDeckImpl.class
+persistency\modell\DbHandler.class
 userAdministration\management\UserMgmt.class
 cardGame\modell\MauMau.class
