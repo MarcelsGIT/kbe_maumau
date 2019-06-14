@@ -1,9 +1,11 @@
 cards\modell\Card.class
 cards\modell\CardsFactory.class
+persistency\PersistencyService.class
 controller\GameController.class
 cardGame\MauMauService.class
 rules\management\RulesMgmt.class
 view\UserInputValidation.class
+persistency\management\PersistencyMgmt.class
 cards\modell\CardDeck.class
 cards\modell\Symbol.class
 config\Configuration.class

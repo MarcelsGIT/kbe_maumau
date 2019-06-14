@@ -1,6 +1,6 @@
 carddeck\modell\test\CardDeckTest.class
 view\test\UserCommunicationTest.class
+cardGame\modell\test\CardGameTest.class
 cardGameUser\modell\test\CardGameUserTest.class
 rules\modell\test\RulesTest.class
-cardGame\modell\test\CardGameTest.class
 view\test\UserInputValidationTest.class
