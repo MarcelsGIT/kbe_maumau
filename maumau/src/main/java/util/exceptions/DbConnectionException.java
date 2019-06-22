@@ -1,6 +1,6 @@
 package util.exceptions;
 
-public class DbConnectionException extends RuntimeException {
+public class DbConnectionException extends RuntimeException implements ICustomException  {
 
 	/**
 	 * 
@@ -15,6 +15,7 @@ public class DbConnectionException extends RuntimeException {
 		System.out.println("Error ID: " + serialVersionUID);
 		System.out.println("Cannot connect to Db");
 		System.out.println("Check Db Creds");
+		this.printStackTrace();
 	}
 	
 	public void printCustomFailureMessage(String message) {

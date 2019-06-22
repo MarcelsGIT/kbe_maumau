@@ -18,6 +18,9 @@ import persistence.modell.JPAHandler;
 import rules.modell.MauMauRules;
 import rules.RulesService;
 import userAdministration.modell.MauMauUser;
+import util.exceptions.DbConnectionException;
+import util.exceptions.LoadGameException;
+import util.exceptions.SaveOrUpdateException;
 import userAdministration.UserService;
 import view.*;
 
@@ -61,16 +64,18 @@ public class GameController implements GameUI {
 	
 	@Autowired
 	private PersistenceService persistenceService;
+	
+	private boolean persistGames;
 
 	public void run() {
-		this.establishDbConnection();
-		
+		this.persistGames = true;
+		this.establishDbConnection();	
 		
 		do {
 			welcomeGame.welcomeMsg();
 			MauMau selectedGame = null;
 			List<String> userNames = welcomeGame.askUserNames(welcomeGame.askHowManyUsers());
-			List<MauMau> unfinishedGames = persistenceService.loadGames(handler, userNames);
+			List<MauMau> unfinishedGames = this.loadGames(userNames);
 			if(unfinishedGames != null) {
 				selectedGame = welcomeGame.askReturnToExistingGame(unfinishedGames);
 			}
@@ -79,7 +84,7 @@ public class GameController implements GameUI {
 				this.maumau = selectedGame;
 			}else {
 				this.maumau = mauMauService.handleGameStart(userNames, rules);
-				this.persistenceService.persistGame(this.maumau, this.handler);
+				
 			}
 			
 			while (this.maumau.isEndGame() == false) {
@@ -93,9 +98,9 @@ public class GameController implements GameUI {
 						maumau.getCurrentPlayer().getHand(), maumau.getUserwish())) {
 					userInformation.informAboutCardsThatWereTaken(this.maumau.getAmountSeven());
 					this.maumau = mauMauService.handleUserHasToTakeCards(this.maumau);
-					this.persistenceService.persistGame(this.maumau, this.handler);
+					this.persist(this.maumau, this.handler);
 					this.maumau = mauMauService.nextPlayer(this.maumau);
-					this.persistenceService.persistGame(this.maumau, this.handler);
+					this.persist(this.maumau, this.handler);
 
 				} else {
 
@@ -104,31 +109,31 @@ public class GameController implements GameUI {
 					}
 
 					this.maumau = handleMauAndMauMauProcedure(this.maumau, rulesService);
-					this.persistenceService.persistGame(this.maumau, this.handler);
+					this.persist(this.maumau, this.handler);
 
 					// User plays card here:
 					userInformation.giveCurrentCardDeckInfo(this.maumau.getCurrentPlayer().getHand());
 					String playOrTake = userCommunication.askIfPlayCardOrTakeCard();
 					if (playOrTake.equalsIgnoreCase("t")) {
 						this.maumau = mauMauService.handleUserHasToTakeCards(maumau);
-						this.persistenceService.persistGame(this.maumau, this.handler);
+						this.persist(this.maumau, this.handler);
 					} else {
 						Card validCard = getValidCard(maumau, lastCard, maumau.getRuleSet(), rulesService);
 						this.maumau = mauMauService.playCardProcedure(maumau, validCard);
-						this.persistenceService.persistGame(this.maumau, this.handler);
+						this.persist(this.maumau, this.handler);
 					}
 
 					// Checks if the user has won:
 					if (this.maumau.getCurrentPlayer().getHand().size() == 0
 							&& this.maumau.getCurrentPlayer().isMaumau()) {
 						this.maumau.setWinner(this.maumau.getCurrentPlayer());
-						this.persistenceService.persistGame(this.maumau, this.handler);
+						this.persist(this.maumau, this.handler);
 						userInformation.informAboutEndOfGame(this.maumau);
 						this.maumau.setEndGame(true);
-						this.persistenceService.persistGame(this.maumau, this.handler);
+						this.persist(this.maumau, this.handler);
 						boolean playAgain = userCommunication.playAgain(this.maumau);
 						this.maumau.setPlayAgain(playAgain);
-						this.persistenceService.persistGame(this.maumau, this.handler);
+						this.persist(this.maumau, this.handler);
 						break;
 					}
 
@@ -141,25 +146,25 @@ public class GameController implements GameUI {
 							|| lastCard.getValue() != playedCard.getValue()) {
 						if (rulesService.isEight(playedCard, rules)) {
 							this.maumau = mauMauService.skipRound(lastPlayer, this.maumau);
-							this.persistenceService.persistGame(this.maumau, this.handler);
+							this.persist(this.maumau, this.handler);
 							MauMauUser userWhoHastToSkipRound = this.maumau.getCurrentPlayer();
 							userInformation.giveSkipRoundInfo(userWhoHastToSkipRound);
 						} else if (rulesService.isBube(playedCard, rules)) {
 							String input = userCommunication.askForUserWish(this.maumau.getCurrentPlayer());
 							Symbol symbol = userCommunication.getSymbolFromString(input);
 							this.maumau.setUserwish(symbol);
-							this.persistenceService.persistGame(this.maumau, this.handler);
+							this.persist(this.maumau, this.handler);
 						} else if (rulesService.isSeven(playedCard, rules)) {
 							int amountSeven = this.maumau.getAmountSeven() + 1; 
 							this.maumau.setAmountSeven(amountSeven);
-							this.persistenceService.persistGame(this.maumau, this.handler);
+							this.persist(this.maumau, this.handler);
 						} else {
 							this.maumau.setAmountSeven(0);
-							//this.persistenceService.persistGame(this.maumau, this.handler);
+							//this.persist(this.maumau, this.handler);
 						}
 					}
 					this.maumau = mauMauService.nextPlayer(this.maumau);
-					this.persistenceService.persistGame(this.maumau, this.handler);
+					this.persist(this.maumau, this.handler);
 				}
 			}
 
@@ -189,18 +194,44 @@ public class GameController implements GameUI {
 		if (mauPossible) {
 			boolean mau = userCommunication.askIfUserWantsToShoutMau();
 			this.maumau = mauMauService.shoutMauProcedure(this.maumau, mau);
-			this.persistenceService.persistGame(this.maumau, this.handler);
+			this.persist(this.maumau, this.handler);
 		}
 		if (maumauPossible) {
 			boolean shoutMaumau = userCommunication.askIfUserWantsToShoutMauMau();
 			this.maumau = mauMauService.shoutMauMauProcedure(this.maumau, shoutMaumau);
-			this.persistenceService.persistGame(this.maumau, this.handler);
+			this.persist(this.maumau, this.handler);
 		}
 		return this.maumau;
 	}
 	
 	private void establishDbConnection() {
-		this.persistenceService.establishConnection("maumau", handler);
+		try {
+			this.persistenceService.establishConnection("maumau", handler);
+		}catch(DbConnectionException e) {
+			persistGames = false;
+			e.printCustomFailureMessages("Cannot Connect to Server. Game runs locally.", "WARNING!!! Your game won´t be saved, you cannot load games.", "Please restart to load and save games.");
+		}
+	}
+	
+	private List<MauMau> loadGames(List<String> userNames){
+		try {
+			if(this.persistGames)
+					return this.persistenceService.loadGames(handler, userNames);
+		}catch(LoadGameException e) {
+			e.printCustomFailureMessages("Cannot load games. Please restart the system or play a new Game.");
+		}
+		return null;
+		
+	}
+	
+	private void persist(MauMau maumau, JPAHandler handler) {
+		try {
+			if(this.persistGames)
+				this.persistenceService.persistGame(maumau, handler);
+			
+		}catch(SaveOrUpdateException e) {
+			e.printCustomFailureMessages("Game cannot be saved. Try again on next action.");
+		}
 	}
 
 }

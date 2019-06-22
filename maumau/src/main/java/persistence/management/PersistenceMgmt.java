@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Persistence;
 
+import org.hibernate.HibernateException;
+import org.hibernate.JDBCException;
 import org.springframework.stereotype.Component;
 
 import cardGame.MauMauService;
@@ -14,6 +16,9 @@ import cards.modell.Card;
 import persistence.PersistenceService;
 import persistence.modell.JPAHandler;
 import userAdministration.modell.MauMauUser;
+import util.exceptions.DbConnectionException;
+import util.exceptions.LoadGameException;
+import util.exceptions.SaveOrUpdateException;
 
 @Component
 public class PersistenceMgmt implements PersistenceService {
@@ -21,19 +26,26 @@ public class PersistenceMgmt implements PersistenceService {
 	@Override
 	public void persistGame(MauMau maumau, JPAHandler handler) {
 		// TODO Auto-generated method stub
+		try {
 		handler.getEm().getTransaction().begin();
 		
 		handler.getEm().persist(maumau);
 		
 		handler.getEm().getTransaction().commit();
+		}catch(JDBCException e) {
+			throw new SaveOrUpdateException();
+		}
 		
 	}
 
 	@Override
 	public JPAHandler establishConnection(String instanceName, JPAHandler handler) {
 		// TODO Auto-generated method stub
+		try {
 		handler.setEm(Persistence.createEntityManagerFactory(instanceName).createEntityManager());
-		
+		}catch(HibernateException e) {
+			throw new DbConnectionException();
+		}
 		return handler;
 	}
 
@@ -66,6 +78,7 @@ public class PersistenceMgmt implements PersistenceService {
 		
 		query += whereClause;
 		
+		try {
 		handler.getEm().getTransaction().begin();
 		
 		List<Integer> unfinishedGameIds = handler.getEm().createNativeQuery(query).getResultList();
@@ -77,6 +90,9 @@ public class PersistenceMgmt implements PersistenceService {
 			unfinishedGames.add(handler.getEm().find(MauMau.class, id));
 		}
 		handler.getEm().getTransaction().commit();
+		}catch(JDBCException e) {
+			throw new LoadGameException();
+		}
 		
 		return unfinishedGames;
 	}
