@@ -83,7 +83,7 @@ public class GameController implements GameUI {
 			if(selectedGame != null) {
 				this.maumau = selectedGame;
 			}else {
-				this.maumau = mauMauService.handleGameStart(userNames, rules);
+				this.maumau = mauMauService.handleGameStart(userNames, rules, 5);
 				
 			}
 			
@@ -97,7 +97,7 @@ public class GameController implements GameUI {
 				if (!rulesService.checkIfUserCanPlay(maumau.getAmountSeven(), rules, lastCard,
 						maumau.getCurrentPlayer().getHand(), maumau.getUserwish())) {
 					userInformation.informAboutCardsThatWereTaken(this.maumau.getAmountSeven());
-					this.maumau = mauMauService.handleUserHasToTakeCards(this.maumau);
+					this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(this.maumau);
 					this.persist(this.maumau, this.handler);
 					this.maumau = mauMauService.nextPlayer(this.maumau);
 					this.persist(this.maumau, this.handler);
@@ -115,7 +115,7 @@ public class GameController implements GameUI {
 					userInformation.giveCurrentCardDeckInfo(this.maumau.getCurrentPlayer().getHand());
 					String playOrTake = userCommunication.askIfPlayCardOrTakeCard();
 					if (playOrTake.equalsIgnoreCase("t")) {
-						this.maumau = mauMauService.handleUserHasToTakeCards(maumau);
+						this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
 						this.persist(this.maumau, this.handler);
 					} else {
 						Card validCard = getValidCard(maumau, lastCard, maumau.getRuleSet(), rulesService);
@@ -209,7 +209,7 @@ public class GameController implements GameUI {
 			this.persistenceService.establishConnection("maumau", handler);
 		}catch(DbConnectionException e) {
 			persistGames = false;
-			e.printCustomFailureMessages("Cannot Connect to Server. Game runs locally.", "WARNING!!! Your game won´t be saved, you cannot load games.", "Please restart to load and save games.");
+			e.printCustomFailureMessages("Cannot Connect to Server. Game runs locally.", "WARNING!!! Your game wonï¿½t be saved, you cannot load games.", "Please restart to load and save games.");
 		}
 	}
 	

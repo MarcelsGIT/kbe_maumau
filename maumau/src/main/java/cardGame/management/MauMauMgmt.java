@@ -148,7 +148,7 @@ private RulesService rulesService;
 		}
 
 		
-		public MauMau handleUserHasToTakeCards(MauMau maumau) {
+		public MauMau giveAllCardsToUserThatUserHasToTake(MauMau maumau) {
 			this.ensureServicesAvailability();
 			if (maumau.getAmountSeven() > 0) {
 				for (int i = 0; i < 2 * maumau.getAmountSeven(); i++) {
@@ -193,7 +193,7 @@ private RulesService rulesService;
 		
 		
 		
-		public MauMau handleGameStart(List<String> userNames, MauMauRules rules) {
+		public MauMau handleGameStart(List<String> userNames, MauMauRules rules, int amountCardsForUser) {
 			this.ensureServicesAvailability();
 			this.cardDeckService = new CardDeckImpl();
 			this.userService = new UserMgmt();
@@ -216,7 +216,7 @@ private RulesService rulesService;
 			maumau = startGame(users, gameCardDeck, new CardDeck(graveyardCards), rules, 0, false, null, 0, null,
 					maumau);
 			maumau.setEndGame(false);
-			maumau = dealCardsToPlayers(maumau, 5);
+			maumau = dealCardsToPlayers(maumau, amountCardsForUser);
 			maumau = chooseWhoStarts(maumau);
 			
 			return maumau;
