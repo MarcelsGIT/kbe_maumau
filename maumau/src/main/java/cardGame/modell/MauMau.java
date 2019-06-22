@@ -1,6 +1,20 @@
 package cardGame.modell;
 
+import java.math.BigInteger;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
@@ -12,19 +26,43 @@ import rules.modell.MauMauRules;
 import userAdministration.UserService;
 import userAdministration.modell.MauMauUser;
 
+@Entity
+@Table(name="Games")
 @Component
 public class MauMau {
+	@Id
+	@GeneratedValue
+	@Column(name="id", columnDefinition="INT")
+	private Integer id;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="cardDeckId")
 	CardDeck deck;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="graveyardId")
 	CardDeck graveyard;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="winnerId", columnDefinition="INT")
+	MauMauUser winner = null;
+	
+	@Enumerated(EnumType.STRING)
+	Symbol userwish;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="gameId")
+	List<MauMauUser> players;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="rulesId")
+	MauMauRules ruleSet;
+	
 	int currentPlayerIndex;
 	boolean penaltyTime;
 	boolean endGame;
-	MauMauUser winner = null;
 	int amountSeven;
-	Symbol userwish;
 	boolean playAgain = false;
-	List<MauMauUser> players;
-	MauMauRules ruleSet;
 	
 	public MauMau(){
 		
@@ -127,5 +165,14 @@ public class MauMau {
 	public void setPenaltyTime(boolean penaltyTime) {
 		this.penaltyTime = penaltyTime;
 	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
 	
 }

@@ -1,13 +1,31 @@
 package userAdministration.modell;
 
+import java.math.BigInteger;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
 import cards.modell.Card;
 
+@Entity
+
+@Table(name="Users")
+//@DiscriminatorValue("A320")
+
 @Component
 public class MauMauUser extends CardGameUser {
+	
+	@Id
+	@GeneratedValue
+	@Column(name="id", columnDefinition="INT")
+	private Integer id;
 	
 	public MauMauUser() {
 		

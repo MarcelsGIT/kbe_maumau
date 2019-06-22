@@ -21,6 +21,8 @@ public class UserMgmt implements UserService {
 		}
 		
 		Card selectedCard = mauMauUser.getCardInHand(index);
+		selectedCard.setOwner(null);
+		selectedCard.setDeck(null);
 		return selectedCard;
 		
 	}

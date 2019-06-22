@@ -1,10 +1,24 @@
 package rules.modell;
 
+import java.math.BigInteger;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.springframework.stereotype.Component;
 
+@Entity
+@Table(name="Rules")
 @Component
 public class MauMauRules {
-
+	@Id
+	@GeneratedValue
+	@Column(name="id", columnDefinition="INT")
+	private Integer id;
+	
 	//@Autowired
 	private boolean jackOnJack;
 	

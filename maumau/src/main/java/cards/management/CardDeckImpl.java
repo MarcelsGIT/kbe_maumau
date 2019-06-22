@@ -23,6 +23,7 @@ public class CardDeckImpl implements CardDeckService {
 		List<Card> cardList = cardDeck.getCards();
 		for (Card singleCard: card) {
 			cardList.add(singleCard);
+			singleCard.setDeck(cardDeck);
 		}
 		cardDeck.setCards(cardList);
 		return cardDeck;
@@ -61,13 +62,22 @@ public class CardDeckImpl implements CardDeckService {
 	
 	public CardDeck addCardsFromGraveyard(CardDeck cardDeck, CardDeck graveyard) {
 		List <Card> cardList = cardDeck.getCards();
-		cardList.addAll(graveyard.getCards());
+		for(Card card : graveyard.getCards()) {
+			card.setDeck(cardDeck);
+			card.setOwner(null);
+			cardList.add(card);
+		}
+		//cardList.addAll(graveyard.getCards());
 		cardDeck.setCards(cardList);
 		return cardDeck;
 	}
 
 	public CardDeck removeCardsFromCardDeckList(CardDeck cardDeck, List<Card> cardsToBeRemoved) {
 		List<Card> cardList = cardDeck.getCards();
+		for(Card card : cardsToBeRemoved) {
+			card.setOwner(null);
+			card.setDeck(null);	
+		}
 		cardList.removeAll(cardsToBeRemoved);
 		cardDeck.setCards(cardList);
 		return cardDeck;

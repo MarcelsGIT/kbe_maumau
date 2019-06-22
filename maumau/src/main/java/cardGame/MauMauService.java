@@ -1,5 +1,4 @@
 package cardGame;
-
 import java.util.List;
 
 import cardGame.modell.MauMau;
