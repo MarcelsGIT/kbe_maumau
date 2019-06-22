@@ -31,6 +31,9 @@ public class RulesMgmt implements RulesService {
 		if(card.getValue() == Value.JACK) return true;
 		return false;
 	}
+	
+	
+	//Tests ab hier
 
 	public boolean checkIsValid(Card lastCard, Card userCard, MauMauRules rules) {
 		boolean valid = false;

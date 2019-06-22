@@ -105,7 +105,7 @@ public interface MauMauService {
 	 * @param userService
 	 * @return MauMau
 	 */
-	MauMau handleUserHasToTakeCards(MauMau maumau);
+	MauMau giveAllCardsToUserThatUserHasToTake(MauMau maumau);
 	
 	/**
 	 * Takes the card the user played and removes it from userhand
@@ -144,7 +144,7 @@ public interface MauMauService {
 	 * @param rulesService
 	 * @return MauMau
 	 */
-	MauMau handleGameStart(List<String> userNames, MauMauRules rules);
+	MauMau handleGameStart(List<String> userNames, MauMauRules rules, int amountCardsForUser);
 
 
 	//void setServices(CardDeckService cardDeckService, UserService userService, RulesService rulesService);

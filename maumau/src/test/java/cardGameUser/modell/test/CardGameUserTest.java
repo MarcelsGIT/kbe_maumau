@@ -25,7 +25,7 @@ public class CardGameUserTest {
 	@Before
 	public void setUpBeforeClass() throws Exception {
 		userMgmt = new UserMgmt();
-		mauMauUser = new MauMauUser("Kaan", cardHand, 0, false, false, false, false);
+		mauMauUser = new MauMauUser("Kaan", cardHand, 0, false, false, false, false, false);
 		cardHand = new LinkedList<Card>();
 		cardHand.add(new Card(Symbol.CLUB, Value.EIGHT));
 		cardHand.add(new Card(Symbol.DIAMOND, Value.ACE));

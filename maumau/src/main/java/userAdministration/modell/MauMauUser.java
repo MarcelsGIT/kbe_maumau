@@ -31,7 +31,7 @@ public class MauMauUser extends CardGameUser {
 		
 	}
 
-	public MauMauUser(String username, List<Card> hand, int wins,boolean isActive,boolean skipRound, boolean mau, boolean maumau) {
+	public MauMauUser(String username, List<Card> hand, int wins,boolean isActive,boolean skipRound, boolean mau, boolean maumau, boolean virtualUser) {
 		super(username, hand, wins);
 		this.isActive = isActive;
 		this.skipRound = skipRound;
