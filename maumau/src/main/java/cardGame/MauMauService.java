@@ -147,7 +147,7 @@ public interface MauMauService {
 	MauMau handleGameStart(List<String> userNames, MauMauRules rules, int amountCardsForUser);
 
 
-	//void setServices(CardDeckService cardDeckService, UserService userService, RulesService rulesService);
+
 	
 	
 

@@ -5,20 +5,25 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import cardGame.modell.MauMau;
+import cards.management.CardDeckImpl;
 import cards.modell.Card;
 import cards.modell.Symbol;
+import cards.modell.Value;
 import rules.RulesService;
-import rules.modell.MauMauRules;
+import rules.management.RulesMgmt;
+import userAdministration.management.UserMgmt;
 import userAdministration.modell.MauMauUser;
 import virtualUserAdministration.VirtualUserService;
 
 @Component
 public class VirtualUserMgmt implements VirtualUserService {
 
+	
 	private RulesService ruleService;
 
-	@Override
+
 	public Card playNextPossibleCardFromHand(MauMauUser virtualMauMauUser, MauMau mauMau, Card lastPlayedCard) {
+		ensureServicesAvailability();
 		List<Card> cards = virtualMauMauUser.getHand();
 		Card validCard = null;
 		for (Card card : cards) {
@@ -32,8 +37,9 @@ public class VirtualUserMgmt implements VirtualUserService {
 		return validCard;
 	}
 
-	@Override
+
 	public MauMauUser setMauIfPossible(MauMauUser virtualMauMauUser, MauMau mauMau) {
+		ensureServicesAvailability();
 		if (ruleService.checkShoutMauPossible(virtualMauMauUser, mauMau.getRuleSet())) {
 			virtualMauMauUser.setMau(true);
 		} else {
@@ -42,8 +48,9 @@ public class VirtualUserMgmt implements VirtualUserService {
 		return virtualMauMauUser;
 	}
 
-	@Override
+	
 	public MauMauUser setMauMauIfPossible(MauMauUser virtualMauMauUser, MauMau mauMau) {
+		ensureServicesAvailability();
 		if (ruleService.checkShoutMauMauPossible(virtualMauMauUser, mauMau.getRuleSet())) {
 			virtualMauMauUser.setMaumau(true);
 		} else {
@@ -51,5 +58,13 @@ public class VirtualUserMgmt implements VirtualUserService {
 		}
 		return virtualMauMauUser;
 	}
+	
+	
+	private void ensureServicesAvailability() {
+
+		if(this.ruleService == null) this.ruleService = new RulesMgmt();
+
+	}
+
 
 }

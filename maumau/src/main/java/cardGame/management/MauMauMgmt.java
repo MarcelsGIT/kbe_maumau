@@ -28,13 +28,7 @@ public class MauMauMgmt implements MauMauService {
 private CardDeckService cardDeckService;
 private UserService userService;
 private RulesService rulesService;
-//
-//@Autowired
-//public void setServices(CardDeckService cardDeckService, UserService userService, RulesService rulesService) {
-//	this.cardDeckService = cardDeckService;
-//	this.rulesService=rulesService;
-//	this.userService= userService;
-//}
+
 	
 	
 

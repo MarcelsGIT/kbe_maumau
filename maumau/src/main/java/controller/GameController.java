@@ -65,8 +65,7 @@ public class GameController implements GameUI {
 
 	@Autowired
 	private PersistenceService persistenceService;
-	
-	
+
 	@Autowired
 	private VirtualUserService virtualUserService;
 
@@ -117,25 +116,26 @@ public class GameController implements GameUI {
 					this.persist(this.maumau, this.handler);
 
 					// User plays card here:
+					Card validCard = null;
+					if(!maumau.getCurrentPlayer().isVirtualUser()) {
 					userInformation.giveCurrentCardDeckInfo(this.maumau.getCurrentPlayer().getHand());
 					String playOrTake = userCommunication.askIfPlayCardOrTakeCard();
-					if (playOrTake.equalsIgnoreCase("t")) {
-						this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
-						this.persist(this.maumau, this.handler);
-
-						// Hier virtual Spieler rein
-					} else {
-						Card validCard;
-						if (maumau.getCurrentPlayer().isVirtualUser()){
-							validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(), maumau, lastCard);
-							//
-							
-						}else {
+						if (playOrTake.equalsIgnoreCase("t")) {
+							this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
+							this.persist(this.maumau, this.handler);
+	
+							// Hier virtual Spieler rein
+						} else {
+	
 							validCard = getValidCard(maumau, lastCard, maumau.getRuleSet(), rulesService);
+						}
+					}else if (maumau.getCurrentPlayer().isVirtualUser()) {
+						validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(),
+								maumau, lastCard);
 						}
 						this.maumau = mauMauService.playCardProcedure(maumau, validCard);
 						this.persist(this.maumau, this.handler);
-					}
+					
 
 					// Checks if the user has won:
 					if (this.maumau.getCurrentPlayer().getHand().size() == 0
@@ -182,8 +182,8 @@ public class GameController implements GameUI {
 				}
 			}
 
-		} while (this.maumau.isPlayAgain());
-		System.out.println("Thanks for playing Maumau, have a nice day!");
+		}while(this.maumau.isPlayAgain());System.out.println("Thanks for playing Maumau, have a nice day!");
+
 	}
 
 	public Card getValidCard(MauMau maumau, Card mostRecentCard, MauMauRules mauMauRules, RulesService ruleservice) {
