@@ -2,23 +2,20 @@ package virtualUserAdministration.management;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cardGame.modell.MauMau;
-import cards.management.CardDeckImpl;
 import cards.modell.Card;
-import cards.modell.Symbol;
-import cards.modell.Value;
 import rules.RulesService;
 import rules.management.RulesMgmt;
-import userAdministration.management.UserMgmt;
 import userAdministration.modell.MauMauUser;
 import virtualUserAdministration.VirtualUserService;
 
 @Component
 public class VirtualUserMgmt implements VirtualUserService {
 
-	
+	@Autowired
 	private RulesService ruleService;
 
 
