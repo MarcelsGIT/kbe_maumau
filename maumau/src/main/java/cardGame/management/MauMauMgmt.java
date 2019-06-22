@@ -40,6 +40,7 @@ private RulesService rulesService;
 
 		public MauMau startGame(List<MauMauUser> userList, CardDeck cardDeck, CardDeck graveyard, MauMauRules rules,
 				int currentPlayerIndex, boolean endGame, MauMauUser winner, int amountSeven, Symbol userwish, MauMau mauMau) {
+			this.ensureServicesAvailability();
 			mauMau.setPlayers(userList);
 			mauMau.setDeck(cardDeck);
 			mauMau.setGraveyard(graveyard);
@@ -53,6 +54,7 @@ private RulesService rulesService;
 
 		// Kaan
 		public MauMau chooseWhoStarts(MauMau mauMau) {
+			this.ensureServicesAvailability();
 			List<MauMauUser> allPlayers = mauMau.getPlayers();
 			int randomIndex = (int) Math.random() * mauMau.getPlayers().size();
 			MauMauUser starterPlayer = allPlayers.get(randomIndex);
@@ -62,6 +64,7 @@ private RulesService rulesService;
 
 		// Marcel
 		public MauMau nextPlayer(MauMau mauMau) {
+			this.ensureServicesAvailability();
 			int nextPlayer = mauMau.getCurrentPlayerIndex() + 1;
 			if (mauMau.getPlayers().size() <= nextPlayer) {
 				nextPlayer = 0;
@@ -74,12 +77,14 @@ private RulesService rulesService;
 
 		// Kaan
 		public MauMau endGame(MauMau mauMau, boolean endGame) {
+			this.ensureServicesAvailability();
 			mauMau.setEndGame(endGame);
 			return mauMau;
 		}
 
 		// No need right now
 		public MauMau insertWinner(MauMauUser user, MauMau mauMau) {
+			this.ensureServicesAvailability();
 			mauMau.setWinner(user);
 			return mauMau;
 
@@ -87,6 +92,7 @@ private RulesService rulesService;
 
 		// Marcel
 		public MauMau skipRound(MauMauUser user, MauMau mauMau) {
+			this.ensureServicesAvailability();
 			// TODO Auto-generated method stub
 			if(mauMau.getCurrentPlayerIndex() == mauMau.getPlayers().size() -1) {
 				mauMau.setCurrentPlayerIndex(0);
@@ -99,6 +105,7 @@ private RulesService rulesService;
 
 		// Marcel
 		public List<Card> dealPenaltyCards(int amount, MauMau mauMau) {
+			this.ensureServicesAvailability();
 			// TODO Auto-generated method stub
 			List<Card> deal = new LinkedList<Card>();
 			for (int i = 0; i < amount; i++) {
@@ -112,6 +119,7 @@ private RulesService rulesService;
 		}
 
 		public MauMau dealCardsToPlayers(MauMau maumau, int amountCard) {
+			this.ensureServicesAvailability();
 			List<MauMauUser> userList = maumau.getPlayers();
 			CardDeck cardDeck = maumau.getDeck();
 			CardDeck graveyard = maumau.getGraveyard();
@@ -130,6 +138,7 @@ private RulesService rulesService;
 		}
 
 		public MauMau giveCardToUser(MauMau maumau) {
+			this.ensureServicesAvailability();
 			CardDeck cardDeck = maumau.getDeck();
 			Card card = cardDeckService.giveCard(maumau.getDeck(), maumau.getGraveyard());
 			cardDeck.setCards(cardDeckService.removeCardFromCardDeckList(cardDeck.getCards(), card));
@@ -140,6 +149,7 @@ private RulesService rulesService;
 
 		
 		public MauMau handleUserHasToTakeCards(MauMau maumau) {
+			this.ensureServicesAvailability();
 			if (maumau.getAmountSeven() > 0) {
 				for (int i = 0; i < 2 * maumau.getAmountSeven(); i++) {
 					maumau = giveCardToUser(maumau);
@@ -154,6 +164,7 @@ private RulesService rulesService;
 		
 		
 		public MauMau playCardProcedure(MauMau maumau, Card validCard) {
+			this.ensureServicesAvailability();
 			maumau.getGraveyard().getCards().add(validCard);
 			maumau.getCurrentPlayer()
 					.setHand(cardDeckService.removeCardFromCardDeckList(maumau.getCurrentPlayer().getHand(), validCard));
@@ -161,6 +172,7 @@ private RulesService rulesService;
 		}
 		
 		public MauMau shoutMauProcedure(MauMau maumau, boolean mau) {
+			this.ensureServicesAvailability();
 			if (mau) {
 				maumau.getCurrentPlayer().setMau(true);
 			} else {
@@ -170,6 +182,7 @@ private RulesService rulesService;
 		}
 		
 		public MauMau shoutMauMauProcedure(MauMau maumau, boolean shoutMaumau) {
+			this.ensureServicesAvailability();
 			if (shoutMaumau) {
 				maumau.getCurrentPlayer().setMaumau(true);
 			} else {
@@ -181,6 +194,7 @@ private RulesService rulesService;
 		
 		
 		public MauMau handleGameStart(List<String> userNames, MauMauRules rules) {
+			this.ensureServicesAvailability();
 			this.cardDeckService = new CardDeckImpl();
 			this.userService = new UserMgmt();
 			this.rulesService = new RulesMgmt();
@@ -206,6 +220,12 @@ private RulesService rulesService;
 			maumau = chooseWhoStarts(maumau);
 			
 			return maumau;
+		}
+		
+		private void ensureServicesAvailability() {
+			if(this.cardDeckService == null) this.cardDeckService = new CardDeckImpl();
+			if(this.rulesService == null) this.rulesService = new RulesMgmt();
+			if(this.userService == null) this.userService = new UserMgmt();
 		}
 
 

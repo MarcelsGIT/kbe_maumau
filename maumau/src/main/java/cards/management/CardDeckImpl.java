@@ -52,6 +52,7 @@ public class CardDeckImpl implements CardDeckService {
 			cardDeck = addCardsFromGraveyard(cardDeck, graveyard);
 			
 		}
+		System.out.println(cardDeck.getCards().get(0));
 		Card card = cardDeck.getCards().get(0);
 		return card;
 	}
