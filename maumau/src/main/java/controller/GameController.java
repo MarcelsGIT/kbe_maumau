@@ -23,6 +23,7 @@ import util.exceptions.LoadGameException;
 import util.exceptions.SaveOrUpdateException;
 import userAdministration.UserService;
 import view.*;
+import virtualUserAdministration.VirtualUserService;
 
 @Controller
 public class GameController implements GameUI {
@@ -58,35 +59,39 @@ public class GameController implements GameUI {
 	private MauMauRules rules;
 
 	private MauMauUser lastPlayer;
-	
+
 	@Autowired
 	private JPAHandler handler;
-	
+
 	@Autowired
 	private PersistenceService persistenceService;
 	
+	
+	@Autowired
+	private VirtualUserService virtualUserService;
+
 	private boolean persistGames;
 
 	public void run() {
 		this.persistGames = true;
-		this.establishDbConnection();	
-		
+		this.establishDbConnection();
+
 		do {
 			welcomeGame.welcomeMsg();
 			MauMau selectedGame = null;
 			List<String> userNames = welcomeGame.askUserNames(welcomeGame.askHowManyUsers());
 			List<MauMau> unfinishedGames = this.loadGames(userNames);
-			if(unfinishedGames != null) {
+			if (unfinishedGames != null) {
 				selectedGame = welcomeGame.askReturnToExistingGame(unfinishedGames);
 			}
-			
-			if(selectedGame != null) {
+
+			if (selectedGame != null) {
 				this.maumau = selectedGame;
-			}else {
+			} else {
 				this.maumau = mauMauService.handleGameStart(userNames, rules, 5);
-				
+
 			}
-			
+
 			while (this.maumau.isEndGame() == false) {
 
 				Card lastCard = cardDeckService.giveMostRecentCard(this.maumau.getGraveyard());
@@ -117,8 +122,17 @@ public class GameController implements GameUI {
 					if (playOrTake.equalsIgnoreCase("t")) {
 						this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
 						this.persist(this.maumau, this.handler);
+
+						// Hier virtual Spieler rein
 					} else {
-						Card validCard = getValidCard(maumau, lastCard, maumau.getRuleSet(), rulesService);
+						Card validCard;
+						if (maumau.getCurrentPlayer().isVirtualUser()){
+							validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(), maumau, lastCard);
+							//
+							
+						}else {
+							validCard = getValidCard(maumau, lastCard, maumau.getRuleSet(), rulesService);
+						}
 						this.maumau = mauMauService.playCardProcedure(maumau, validCard);
 						this.persist(this.maumau, this.handler);
 					}
@@ -155,12 +169,12 @@ public class GameController implements GameUI {
 							this.maumau.setUserwish(symbol);
 							this.persist(this.maumau, this.handler);
 						} else if (rulesService.isSeven(playedCard, rules)) {
-							int amountSeven = this.maumau.getAmountSeven() + 1; 
+							int amountSeven = this.maumau.getAmountSeven() + 1;
 							this.maumau.setAmountSeven(amountSeven);
 							this.persist(this.maumau, this.handler);
 						} else {
 							this.maumau.setAmountSeven(0);
-							//this.persist(this.maumau, this.handler);
+							// this.persist(this.maumau, this.handler);
 						}
 					}
 					this.maumau = mauMauService.nextPlayer(this.maumau);
@@ -203,33 +217,35 @@ public class GameController implements GameUI {
 		}
 		return this.maumau;
 	}
-	
+
 	private void establishDbConnection() {
 		try {
 			this.persistenceService.establishConnection("maumau", handler);
-		}catch(DbConnectionException e) {
+		} catch (DbConnectionException e) {
 			persistGames = false;
-			e.printCustomFailureMessages("Cannot Connect to Server. Game runs locally.", "WARNING!!! Your game won�t be saved, you cannot load games.", "Please restart to load and save games.");
+			e.printCustomFailureMessages("Cannot Connect to Server. Game runs locally.",
+					"WARNING!!! Your game won�t be saved, you cannot load games.",
+					"Please restart to load and save games.");
 		}
 	}
-	
-	private List<MauMau> loadGames(List<String> userNames){
+
+	private List<MauMau> loadGames(List<String> userNames) {
 		try {
-			if(this.persistGames)
-					return this.persistenceService.loadGames(handler, userNames);
-		}catch(LoadGameException e) {
+			if (this.persistGames)
+				return this.persistenceService.loadGames(handler, userNames);
+		} catch (LoadGameException e) {
 			e.printCustomFailureMessages("Cannot load games. Please restart the system or play a new Game.");
 		}
 		return null;
-		
+
 	}
-	
+
 	private void persist(MauMau maumau, JPAHandler handler) {
 		try {
-			if(this.persistGames)
+			if (this.persistGames)
 				this.persistenceService.persistGame(maumau, handler);
-			
-		}catch(SaveOrUpdateException e) {
+
+		} catch (SaveOrUpdateException e) {
 			e.printCustomFailureMessages("Game cannot be saved. Try again on next action.");
 		}
 	}

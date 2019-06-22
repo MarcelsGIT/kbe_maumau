@@ -37,9 +37,26 @@ public class MauMauUser extends CardGameUser {
 		this.skipRound = skipRound;
 		this.mau = mau;
 		this.maumau = maumau;
+		this.virtualUser = virtualUser;
 		
 	}
 	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public boolean isVirtualUser() {
+		return virtualUser;
+	}
+
+	public void setVirtualUser(boolean virtualUser) {
+		this.virtualUser = virtualUser;
+	}
+
 	public MauMauUser(String username, List<Card> hand, int wins) {
 		super(username, hand, wins);
 	}
@@ -48,6 +65,7 @@ public class MauMauUser extends CardGameUser {
 	private boolean skipRound;
 	private boolean mau;
 	private boolean maumau;
+	private boolean virtualUser;
 	
 	public boolean isActive() {
 		return isActive;

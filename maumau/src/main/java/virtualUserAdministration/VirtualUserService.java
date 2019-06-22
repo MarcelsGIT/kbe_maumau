@@ -7,11 +7,11 @@ import userAdministration.modell.MauMauUser;
 public interface VirtualUserService {
 	
 	
-	Card playNextPossibleCardFromHand(MauMauUser mauMauUser, MauMau mauMau, Card lastPlayedCard);
+	Card playNextPossibleCardFromHand(MauMauUser virtualMauMauUser, MauMau mauMau, Card lastPlayedCard);
 	
-	MauMauUser setMauIfPossible(MauMauUser mauMauUser, MauMau mauMau);
+	MauMauUser setMauIfPossible(MauMauUser virtualMauMauUser, MauMau mauMau);
 	
-	MauMauUser setMauMauIfPossible(MauMauUser mauMauUser, MauMau mauMau);
+	MauMauUser setMauMauIfPossible(MauMauUser virtualMauMauUser, MauMau mauMau);
 	
 	
 	
