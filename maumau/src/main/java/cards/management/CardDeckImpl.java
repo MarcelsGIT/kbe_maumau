@@ -62,12 +62,17 @@ public class CardDeckImpl implements CardDeckService {
 	
 	public CardDeck addCardsFromGraveyard(CardDeck cardDeck, CardDeck graveyard) {
 		List <Card> cardList = cardDeck.getCards();
+		//Card lastPlayedCard = graveyard.getCards().get(graveyard.getCards().size() -1);
 		for(Card card : graveyard.getCards()) {
-			card.setDeck(cardDeck);
-			card.setOwner(null);
+			//if(card != lastPlayedCard) {
+				card.setDeck(cardDeck);
+				card.setOwner(null);
+			//}
 			//cardList.add(card);
 		}
+		//graveyard.getCards().remove(lastPlayedCard);
 		cardList.addAll(graveyard.getCards());
+		//graveyard.getCards().add(lastPlayedCard);
 		cardDeck.setCards(cardList);
 		return cardDeck;
 	}
