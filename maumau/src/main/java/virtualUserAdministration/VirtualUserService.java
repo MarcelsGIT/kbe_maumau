@@ -2,6 +2,7 @@ package virtualUserAdministration;
 
 import cardGame.modell.MauMau;
 import cards.modell.Card;
+import cards.modell.Symbol;
 import userAdministration.modell.MauMauUser;
 
 public interface VirtualUserService {
@@ -32,6 +33,13 @@ public interface VirtualUserService {
 	 * @return virtualMauMauUser
 	 */
 	MauMauUser setMauMauIfPossible(MauMauUser virtualMauMauUser, MauMau mauMau);
+	
+	/**
+	 * Returns the Symbol of the first Card of Virtual Player
+	 * @param virtualMauMauUser
+	 * @return Symbol
+	 */
+	Symbol makeWhishByTakingFirstCardSymbol(MauMauUser virtualMauMauUser);
 	
 	
 	

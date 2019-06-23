@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import cardGame.modell.MauMau;
 import cards.modell.Card;
+import cards.modell.Symbol;
 import rules.RulesService;
 import rules.management.RulesMgmt;
 import userAdministration.modell.MauMauUser;
@@ -57,11 +58,23 @@ public class VirtualUserMgmt implements VirtualUserService {
 	}
 	
 	
-	private void ensureServicesAvailability() {
-
-		if(this.ruleService == null) this.ruleService = new RulesMgmt();
-
+	
+	public Symbol makeWhishByTakingFirstCardSymbol(MauMauUser virtualMauMauUser) {
+		ensureServicesAvailability();
+		Symbol symbol = virtualMauMauUser.getCardInHand(0).getSymbol();
+		return symbol;
 	}
+	
+	
+	
+	
+	
+	private void ensureServicesAvailability() {
+		if(this.ruleService == null) this.ruleService = new RulesMgmt();
+	}
+
+
+
 
 
 }

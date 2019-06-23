@@ -60,7 +60,7 @@ public class CardGameTest {
 	private static List<Card> cards2;
 	private static CardDeck graveyard; 
 	private static CardDeck cardDeck;
-	private static MauMau maumau2;
+	private  MauMau maumau2;
 	private static List<MauMauUser> players;
 	private static MauMauRules ruleset;
 	

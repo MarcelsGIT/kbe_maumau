@@ -117,25 +117,23 @@ public class GameController implements GameUI {
 
 					// User plays card here:
 					Card validCard = null;
-					if(!maumau.getCurrentPlayer().isVirtualUser()) {
-					userInformation.giveCurrentCardDeckInfo(this.maumau.getCurrentPlayer().getHand());
-					String playOrTake = userCommunication.askIfPlayCardOrTakeCard();
+					if (!maumau.getCurrentPlayer().isVirtualUser()) {
+						userInformation.giveCurrentCardDeckInfo(this.maumau.getCurrentPlayer().getHand());
+						String playOrTake = userCommunication.askIfPlayCardOrTakeCard();
 						if (playOrTake.equalsIgnoreCase("t")) {
 							this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
 							this.persist(this.maumau, this.handler);
-	
-							// Hier virtual Spieler rein
+
 						} else {
-	
+
 							validCard = getValidCard(maumau, lastCard, maumau.getRuleSet(), rulesService);
 						}
-					}else if (maumau.getCurrentPlayer().isVirtualUser()) {
-						validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(),
-								maumau, lastCard);
-						}
-						this.maumau = mauMauService.playCardProcedure(maumau, validCard);
-						this.persist(this.maumau, this.handler);
-					
+					} else if (maumau.getCurrentPlayer().isVirtualUser()) {
+						validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(), maumau,
+								lastCard);
+					}
+					this.maumau = mauMauService.playCardProcedure(maumau, validCard);
+					this.persist(this.maumau, this.handler);
 
 					// Checks if the user has won:
 					if (this.maumau.getCurrentPlayer().getHand().size() == 0
@@ -164,8 +162,13 @@ public class GameController implements GameUI {
 							MauMauUser userWhoHastToSkipRound = this.maumau.getCurrentPlayer();
 							userInformation.giveSkipRoundInfo(userWhoHastToSkipRound);
 						} else if (rulesService.isBube(playedCard, rules)) {
-							String input = userCommunication.askForUserWish(this.maumau.getCurrentPlayer());
-							Symbol symbol = userCommunication.getSymbolFromString(input);
+							Symbol symbol = null;
+							if (!lastPlayer.isVirtualUser()) {
+								String input = userCommunication.askForUserWish(this.maumau.getCurrentPlayer());
+								symbol = userCommunication.getSymbolFromString(input);
+							} else {
+								symbol = virtualUserService.makeWhishByTakingFirstCardSymbol(lastPlayer);
+							}
 							this.maumau.setUserwish(symbol);
 							this.persist(this.maumau, this.handler);
 						} else if (rulesService.isSeven(playedCard, rules)) {
@@ -182,7 +185,8 @@ public class GameController implements GameUI {
 				}
 			}
 
-		}while(this.maumau.isPlayAgain());System.out.println("Thanks for playing Maumau, have a nice day!");
+		} while (this.maumau.isPlayAgain());
+		System.out.println("Thanks for playing Maumau, have a nice day!");
 
 	}
 

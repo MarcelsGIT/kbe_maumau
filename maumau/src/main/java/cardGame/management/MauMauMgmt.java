@@ -189,12 +189,8 @@ private RulesService rulesService;
 		
 		public MauMau handleGameStart(List<String> userNames, MauMauRules rules, int amountCardsForUser) {
 			this.ensureServicesAvailability();
-			this.cardDeckService = new CardDeckImpl();
-			this.userService = new UserMgmt();
-			this.rulesService = new RulesMgmt();
 			List<MauMauUser> users = userService.createUsers(userNames);
 			CardDeck gameCardDeck = cardDeckService.createCardDeck(cardDeckService.createCards());
-
 			List<Card> shuffledGameCards = cardDeckService.shuffle(gameCardDeck);
 			Card firstGraveyardCard = shuffledGameCards.get(0);
 
