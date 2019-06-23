@@ -110,13 +110,11 @@ public class CardGameTest {
 	@BeforeEach
 	public void createCardList() {
 		MockitoAnnotations.initMocks(this);
-		 //mauMauUser3 = new MauMauUser("Superman", new LinkedList <Card> (), 0, true, false, false, false);
 		cards2 = new LinkedList<Card>();
 		cards2.add(new Card(Symbol.CLUB, Value.NINE));
 		cards2.add(new Card(Symbol.SPADE, Value.KING));
 		cards2.add(new Card(Symbol.HEART, Value.TEN));
 		cards2.add(new Card(Symbol.DIAMOND, Value.SEVEN));
-		//mauMauUser3.setHand(cards2);
 		ruleset = new MauMauRules();
 		maumau2 = new MauMau(players, ruleset, cardDeck, graveyard,
 				0, false, null, 0, null);
@@ -178,40 +176,34 @@ public class CardGameTest {
 	
 	
 	
-	//////MUSS NOCH WAS GEMACHT WERDEN!!
-	
 	@Test
 	public void testDealCardsToPlayers() {
-		//MauMau maumau, int amountCards#
 		MauMauUser mauMauUser3 = new MauMauUser("Superman", new LinkedList <Card> (), 0, true, false, false, false, false);
-		maumau2.getPlayers().set(0, mauMauUser3);
-		when(cardDeckService.dealCards(cardDeck, 5, graveyard)).thenReturn(cards);
-		maumau2 = mauMauMgmt.dealCardsToPlayers(maumau2, 5);
+		LinkedList <MauMauUser> users = new LinkedList <MauMauUser> ();
+		users.add(mauMauUser3);
+		MauMau maumau = new MauMau ();
+		maumau.setPlayers(users);
+		LinkedList <Card>cardGameCards = new LinkedList <Card>();
+		cardGameCards.add(new Card(Symbol.CLUB, Value.NINE));
+		cardGameCards.add(new Card(Symbol.SPADE, Value.KING));
+		cardGameCards.add(new Card(Symbol.HEART, Value.TEN));
+		cardGameCards.add(new Card(Symbol.DIAMOND, Value.SEVEN));
+		CardDeck cardDeck = new CardDeck();
+		cardDeck.setCards(cardGameCards);
+		CardDeck graveyard = new CardDeck();
+		graveyard.setCards(cardGameCards);
+		maumau.setDeck(cardDeck);
+		maumau.setGraveyard(graveyard);
+		when(cardDeckService.dealCards(cardDeck, 4, graveyard)).thenReturn(cardGameCards);
+		when(cardDeckService.removeCardsFromCardDeckList(cardDeck, cardGameCards)).thenReturn(cardDeck);
+		maumau = mauMauMgmt.dealCardsToPlayers(maumau, 4);
+		assertEquals(4, maumau.getPlayers().get(0).getHand().size());
 		
-		System.out.println(maumau2.getPlayers().get(0).getHand().size());
-		assertEquals(5, maumau2.getPlayers().get(0).getHand().size());
 		
 	}
 	
 	
 	
-//	public MauMau dealCardsToPlayers(MauMau maumau, int amountCard) {
-//		List<MauMauUser> userList = maumau.getPlayers();
-//		CardDeck cardDeck = maumau.getDeck();
-//		CardDeck graveyard = maumau.getGraveyard();
-//		for (int i = 0; i < userList.size(); i++) {
-//			MauMauUser user = userList.get(i);
-//			List<Card> hand = cardDeckService.dealCards(cardDeck, amountCard, graveyard);
-//			user.setHand(hand);
-//			userList.set(i, user);
-//			cardDeck.getCards().removeAll(hand);
-//		}
-//		maumau.setPlayers(userList);
-//		maumau.setDeck(cardDeck);
-//		maumau.setGraveyard(graveyard);
-//
-//		return maumau;
-//	}
 	
 	
 	@Test 
@@ -247,19 +239,7 @@ public class CardGameTest {
 		when(cardDeckService.giveCard(cardDeck, graveyard)).thenReturn(cardFromDeck);
 		when(cardDeckService.removeCardFromCardDeckList(cards, cardFromDeck)).thenReturn(cards);
 		when(userService.takeCard(cardFromDeck, maumau2.getCurrentPlayer())).thenReturn(mauMauUser3);
-		
-		///Komischerweise wird hier was ausgeführt (-> nur zum Test)
-//		when(userService.playCard(0, mauMauUser3)).thenReturn(cardFromDeck);
-//		Card card = userService.playCard(0, mauMauUser3);
-//		System.out.println("HIIIER " + card.getValue().toString());
-		
-
-		//Aber hier wird nichts ausgeführt (auch nur zum Test)
-//		when(userService.takeCard(cardFromDeck, maumau2.getCurrentPlayer())).thenReturn(mauMauUser3);
-//		MauMauUser user = userService.takeCard(cardFromDeck, maumau2.getCurrentPlayer());
-//		System.out.println("HIER "+ user.getUsername());
-		
-		
+				
 		maumau2 = mauMauMgmt.giveAllCardsToUserThatUserHasToTake(maumau2);
 		assertEquals(0, maumau2.getAmountSeven());
 		
@@ -330,42 +310,80 @@ public class CardGameTest {
 	}
 	
 	
-	////Muss noch was getan werden
 	@Test
-	public void testHandleGameStart() {
-		when(cardDeckService.createCards()).thenReturn(cards);
-		when(cardDeckService.createCardDeck(cards)).thenReturn(cardDeck);
-		CardDeck cardDeck2 = cardDeckService.createCardDeck(cards);
-		System.out.println(cardDeck2.getCards().get(0).getSymbol());
+	public void testHandleGameStartUsers() {
+		LinkedList <Card> cardGameCards = new LinkedList<Card>();
+		cardGameCards.add(new Card(Symbol.CLUB, Value.NINE));
+		cardGameCards.add(new Card(Symbol.SPADE, Value.KING));
+		cardGameCards.add(new Card(Symbol.HEART, Value.TEN));
+		cardGameCards.add(new Card(Symbol.DIAMOND, Value.SEVEN));
+		CardDeck cardDeck = new CardDeck();
+		cardDeck.setCards(cardGameCards);
+		when(cardDeckService.createCards()).thenReturn(cardGameCards);
+		when(cardDeckService.createCardDeck(cardGameCards)).thenReturn(cardDeck);
+		when(cardDeckService.shuffle(cardDeck)).thenReturn(cardGameCards);
+		List <String> userNames = new LinkedList <String>();
+		userNames.add("name1");
+		userNames.add("name2");
+		List<MauMauUser> users = new LinkedList <MauMauUser>();
+		users.add(new MauMauUser("name1", new LinkedList<Card>(), 0));
+		users.add(new MauMauUser("name2", new LinkedList<Card>(), 0));
+		when(userService.createUsers(userNames)).thenReturn(users);
+		MauMau maumau = mauMauMgmt.handleGameStart(userNames, new MauMauRules(), 2);
+		assertEquals("name1", maumau.getPlayers().get(0).getUsername());
 	}
 	
-//	public MauMau handleGameStart(List<String> userNames, MauMauRules rules, int amountCardsForUser) {
-//		this.cardDeckService = new CardDeckImpl();
-//		this.userService = new UserMgmt();
-//		this.rulesService = new RulesMgmt();
-//		List<MauMauUser> users = userService.createUsers(userNames);
-//		CardDeck gameCardDeck = cardDeckService.createCardDeck(cardDeckService.createCards());
-//
-//		List<Card> shuffledGameCards = cardDeckService.shuffle(gameCardDeck);
-//		Card firstGraveyardCard = shuffledGameCards.get(0);
-//
-//		while (rulesService.checkIfSpecialCard(firstGraveyardCard)) {
-//			shuffledGameCards = cardDeckService.shuffle(gameCardDeck);
-//			firstGraveyardCard = shuffledGameCards.get(0);
-//		}
-//
-//		shuffledGameCards.remove(0);
-//		List<Card> graveyardCards = new LinkedList<Card>();
-//		graveyardCards.add(firstGraveyardCard);
-//		MauMau maumau = new MauMau();
-//		maumau = startGame(users, gameCardDeck, new CardDeck(graveyardCards), rules, 0, false, null, 0, null,
-//				maumau);
-//		maumau.setEndGame(false);
-//		maumau = dealCardsToPlayers(maumau, amountCardsForUser);
-//		maumau = chooseWhoStarts(maumau);
-//		
-//		return maumau;
-//	}
+	
+	@Test
+	public void testHandleGameStartUsersFirstGraveYardCard() {
+		LinkedList <Card> cardGameCards = new LinkedList<Card>();
+		cardGameCards.add(new Card(Symbol.CLUB, Value.NINE));
+		cardGameCards.add(new Card(Symbol.SPADE, Value.KING));
+		cardGameCards.add(new Card(Symbol.HEART, Value.TEN));
+		cardGameCards.add(new Card(Symbol.DIAMOND, Value.SEVEN));
+		CardDeck cardDeck = new CardDeck();
+		cardDeck.setCards(cardGameCards);
+		when(cardDeckService.createCards()).thenReturn(cardGameCards);
+		when(cardDeckService.createCardDeck(cardGameCards)).thenReturn(cardDeck);
+		when(cardDeckService.shuffle(cardDeck)).thenReturn(cardGameCards);
+		List <String> userNames = new LinkedList <String>();
+		userNames.add("name1");
+		userNames.add("name2");
+		List<MauMauUser> users = new LinkedList <MauMauUser>();
+		users.add(new MauMauUser("name1", new LinkedList<Card>(), 0));
+		users.add(new MauMauUser("name2", new LinkedList<Card>(), 0));
+		when(userService.createUsers(userNames)).thenReturn(users);
+		MauMau maumau = mauMauMgmt.handleGameStart(userNames, new MauMauRules(), 2);
+		assertEquals(Symbol.CLUB, maumau.getGraveyard().getCards().get(0).getSymbol());
+	}
+	
+	@Test
+	public void testHandleGameStart() {
+		LinkedList <Card> cardGameCards = new LinkedList<Card>();
+		cardGameCards.add(new Card(Symbol.CLUB, Value.NINE));
+		cardGameCards.add(new Card(Symbol.SPADE, Value.KING));
+		cardGameCards.add(new Card(Symbol.HEART, Value.TEN));
+		cardGameCards.add(new Card(Symbol.DIAMOND, Value.SEVEN));
+		CardDeck cardDeck = new CardDeck();
+		cardDeck.setCards(cardGameCards);
+		when(cardDeckService.createCards()).thenReturn(cardGameCards);
+		when(cardDeckService.createCardDeck(cardGameCards)).thenReturn(cardDeck);
+		when(cardDeckService.shuffle(cardDeck)).thenReturn(cardGameCards);
+		List <String> userNames = new LinkedList <String>();
+		userNames.add("name1");
+		userNames.add("name2");
+		List<MauMauUser> users = new LinkedList <MauMauUser>();
+		users.add(new MauMauUser("name1", new LinkedList<Card>(), 0));
+		users.add(new MauMauUser("name2", new LinkedList<Card>(), 0));
+		when(userService.createUsers(userNames)).thenReturn(users);
+		MauMau maumau = mauMauMgmt.handleGameStart(userNames, new MauMauRules(), 2);
+		assertEquals(Symbol.CLUB, maumau.getGraveyard().getCards().get(0).getSymbol());
+	}
+	
+	
+	
+	
+
 
 	
 

@@ -119,10 +119,11 @@ private RulesService rulesService;
 			CardDeck graveyard = maumau.getGraveyard();
 			for (int i = 0; i < userList.size(); i++) {
 				MauMauUser user = userList.get(i);
-				List<Card> hand = cardDeckService.dealCards(cardDeck, 5, graveyard);
+				List<Card> hand = cardDeckService.dealCards(cardDeck, amountCard, graveyard);
 				user.setHand(hand);
 				userList.set(i, user);
-				cardDeck.getCards().removeAll(hand);
+				cardDeck = cardDeckService.removeCardsFromCardDeckList(cardDeck, hand);
+				userList.set(i, user);
 			}
 			maumau.setPlayers(userList);
 			maumau.setDeck(cardDeck);
@@ -193,7 +194,6 @@ private RulesService rulesService;
 			CardDeck gameCardDeck = cardDeckService.createCardDeck(cardDeckService.createCards());
 			List<Card> shuffledGameCards = cardDeckService.shuffle(gameCardDeck);
 			Card firstGraveyardCard = shuffledGameCards.get(0);
-
 			while (rulesService.checkIfSpecialCard(firstGraveyardCard)) {
 				shuffledGameCards = cardDeckService.shuffle(gameCardDeck);
 				firstGraveyardCard = shuffledGameCards.get(0);
