@@ -127,13 +127,17 @@ public class GameController implements GameUI {
 						} else {
 
 							validCard = getValidCard(maumau, lastCard, maumau.getRuleSet(), rulesService);
+							this.maumau = mauMauService.playCardProcedure(maumau, validCard);
+							this.persist(this.maumau, this.handler);
 						}
 					} else if (maumau.getCurrentPlayer().isVirtualUser()) {
 						validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(), maumau,
 								lastCard);
+						this.maumau = mauMauService.playCardProcedure(maumau, validCard);
+						this.persist(this.maumau, this.handler);
 					}
-					this.maumau = mauMauService.playCardProcedure(maumau, validCard);
-					this.persist(this.maumau, this.handler);
+//					this.maumau = mauMauService.playCardProcedure(maumau, validCard);
+//					this.persist(this.maumau, this.handler);
 
 					// Checks if the user has won:
 					if (this.maumau.getCurrentPlayer().getHand().size() == 0

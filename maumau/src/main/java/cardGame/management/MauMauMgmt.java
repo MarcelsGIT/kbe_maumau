@@ -24,9 +24,11 @@ import userAdministration.modell.MauMauUser;
 @Component
 public class MauMauMgmt implements MauMauService {
 
-
+@Autowired
 private CardDeckService cardDeckService;
+@Autowired
 private UserService userService;
+@Autowired
 private RulesService rulesService;
 
 	
