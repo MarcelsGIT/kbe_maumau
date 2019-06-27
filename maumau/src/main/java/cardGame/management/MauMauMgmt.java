@@ -189,7 +189,9 @@ private RulesService rulesService;
 		}
 		
 		
-		
+		/*
+		 * CardDeck enthält weiterhin die Karte, die eigentlich als firstGraveyardCard auf den Ablagestapel gelegt wird
+		 * */
 		public MauMau handleGameStart(List<String> userNames, MauMauRules rules, int amountCardsForUser) {
 			this.ensureServicesAvailability();
 			List<MauMauUser> users = userService.createUsers(userNames);
