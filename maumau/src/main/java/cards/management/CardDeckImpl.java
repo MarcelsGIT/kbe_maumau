@@ -11,6 +11,7 @@ import cards.modell.Card;
 import cards.modell.CardDeck;
 import cards.modell.Symbol;
 import cards.modell.Value;
+import util.exceptions.NoMoreCardsException;
 
 @Component
 public class CardDeckImpl implements CardDeckService {
@@ -31,7 +32,8 @@ public class CardDeckImpl implements CardDeckService {
 
 	public List<Card> dealCards(CardDeck cardDeck, int amount, CardDeck graveyard) {
 		if (cardDeck.getCards().size()< amount) {
-			cardDeck = addCardsFromGraveyard(cardDeck, graveyard);
+			//cardDeck = addCardsFromGraveyard(cardDeck, graveyard);
+			throw new NoMoreCardsException();
 		}
 		List<Card> cardDeckCards = cardDeck.getCards();
 		List <Card> dealedCards = new LinkedList<Card>();
@@ -49,8 +51,8 @@ public class CardDeckImpl implements CardDeckService {
 
 	public Card giveCard(CardDeck cardDeck, CardDeck graveyard) {
 		if (cardDeck.getCards().size()<1) {
-			cardDeck = addCardsFromGraveyard(cardDeck, graveyard);
-			
+			//cardDeck = addCardsFromGraveyard(cardDeck, graveyard);
+			throw new NoMoreCardsException();
 		}
 		Card card = cardDeck.getCards().get(0);
 		return card;
@@ -60,20 +62,23 @@ public class CardDeckImpl implements CardDeckService {
 		return cardDeck.getCards().get(cardDeck.getCards().size()-1);
 	}
 	
+	@Deprecated
 	public CardDeck addCardsFromGraveyard(CardDeck cardDeck, CardDeck graveyard) {
-		List <Card> cardList = cardDeck.getCards();
-		//Card lastPlayedCard = graveyard.getCards().get(graveyard.getCards().size() -1);
+		//List <Card> cardList = cardDeck.getCards();
+		Card lastPlayedCard = graveyard.getCards().get(graveyard.getCards().size() -1);
 		for(Card card : graveyard.getCards()) {
-			//if(card != lastPlayedCard) {
+			if(card != lastPlayedCard) {
 				card.setDeck(cardDeck);
 				card.setOwner(null);
-			//}
-			//cardList.add(card);
+			}
+			cardDeck.getCards().add(card);
 		}
+		graveyard.getCards().clear();
+		graveyard.getCards().add(lastPlayedCard);
 		//graveyard.getCards().remove(lastPlayedCard);
-		cardList.addAll(graveyard.getCards());
+		//cardList.addAll(graveyard.getCards());
 		//graveyard.getCards().add(lastPlayedCard);
-		cardDeck.setCards(cardList);
+		//cardDeck.setCards(cardList);
 		return cardDeck;
 	}
 

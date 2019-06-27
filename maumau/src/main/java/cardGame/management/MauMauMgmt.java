@@ -20,6 +20,7 @@ import rules.modell.MauMauRules;
 import userAdministration.UserService;
 import userAdministration.management.UserMgmt;
 import userAdministration.modell.MauMauUser;
+import util.exceptions.NoMoreCardsException;
 
 @Component
 public class MauMauMgmt implements MauMauService {
@@ -56,6 +57,26 @@ private RulesService rulesService;
 			MauMauUser starterPlayer = allPlayers.get(randomIndex);
 			mauMau.setCurrentPlayer(starterPlayer);
 			return mauMau;
+		}
+		
+		//Marcel
+		public MauMau transferCardsFromGraveyardToCardDeck(MauMau maumau)throws NoMoreCardsException {
+			Card lastPlayedCard = maumau.getGraveyard().getCards().get(maumau.getGraveyard().getCards().size() -1);
+			for(Card card : maumau.getGraveyard().getCards()) {
+				if(card != lastPlayedCard) {
+					card.setDeck(maumau.getDeck());
+					card.setOwner(null);
+				}
+				maumau.getDeck().getCards().add(card);
+			}
+			maumau.getGraveyard().getCards().clear();
+			maumau.getGraveyard().getCards().add(lastPlayedCard);
+			//graveyard.getCards().remove(lastPlayedCard);
+			//cardList.addAll(graveyard.getCards());
+			//graveyard.getCards().add(lastPlayedCard);
+			//cardDeck.setCards(cardList);
+			
+			return maumau;
 		}
 
 		// Marcel
@@ -114,30 +135,51 @@ private RulesService rulesService;
 			return deal;
 		}
 
-		public MauMau dealCardsToPlayers(MauMau maumau, int amountCard) {
+		public MauMau dealCardsToPlayers(MauMau maumau, int amountCard)throws NoMoreCardsException {
 			this.ensureServicesAvailability();
-			List<MauMauUser> userList = maumau.getPlayers();
-			CardDeck cardDeck = maumau.getDeck();
-			CardDeck graveyard = maumau.getGraveyard();
-			for (int i = 0; i < userList.size(); i++) {
-				MauMauUser user = userList.get(i);
-				List<Card> hand = cardDeckService.dealCards(cardDeck, amountCard, graveyard);
-				user.setHand(hand);
-				userList.set(i, user);
-				cardDeck = cardDeckService.removeCardsFromCardDeckList(cardDeck, hand);
-				userList.set(i, user);
+			//List<MauMauUser> userList = maumau.getPlayers();
+			//CardDeck cardDeck = maumau.getDeck();
+			//CardDeck graveyard = maumau.getGraveyard();
+			try {
+				for (int i = 0; i < maumau.getPlayers().size(); i++) {
+					List<Card> hand = cardDeckService.dealCards(maumau.getDeck(), amountCard, maumau.getGraveyard());
+					maumau.getPlayers().get(i).setHand(hand);
+					maumau.getDeck().getCards().removeAll(hand);
+				
+					//userList.set(i, user);
+					//cardDeck = cardDeckService.removeCardsFromCardDeckList(cardDeck, hand);
+					//userList.set(i, user);
+				}
+			}catch(NoMoreCardsException e) {
+				maumau = this.transferCardsFromGraveyardToCardDeck(maumau);
+				for (int i = 0; i < maumau.getPlayers().size(); i++) {
+					List<Card> hand = cardDeckService.dealCards(maumau.getDeck(), amountCard, maumau.getGraveyard());
+					maumau.getPlayers().get(i).setHand(hand);
+					maumau.getDeck().getCards().removeAll(hand);
+				
+					//userList.set(i, user);
+					//cardDeck = cardDeckService.removeCardsFromCardDeckList(cardDeck, hand);
+					//userList.set(i, user);
+				}
 			}
-			maumau.setPlayers(userList);
-			maumau.setDeck(cardDeck);
-			maumau.setGraveyard(graveyard);
+			///maumau.setPlayers(userList);
+			//maumau.setDeck(cardDeck);
+			//maumau.setGraveyard(graveyard);
 
 			return maumau;
 		}
 
-		public MauMau giveCardToUser(MauMau maumau) {
+		public MauMau giveCardToUser(MauMau maumau)throws NoMoreCardsException {
 			this.ensureServicesAvailability();
 			CardDeck cardDeck = maumau.getDeck();
-			Card card = cardDeckService.giveCard(maumau.getDeck(), maumau.getGraveyard());
+			Card card = null;
+			try {
+				card = cardDeckService.giveCard(maumau.getDeck(), maumau.getGraveyard());
+			}catch(NoMoreCardsException e) {
+				e.printFailureMessage();
+				maumau = this.transferCardsFromGraveyardToCardDeck(maumau);
+				card = cardDeckService.giveCard(maumau.getDeck(), maumau.getGraveyard());
+			}
 			cardDeck.setCards(cardDeckService.removeCardFromCardDeckList(cardDeck.getCards(), card));
 			maumau.setDeck(cardDeck);
 			maumau.setCurrentPlayer(userService.takeCard(card, maumau.getCurrentPlayer()));
@@ -145,7 +187,7 @@ private RulesService rulesService;
 		}
 
 		
-		public MauMau giveAllCardsToUserThatUserHasToTake(MauMau maumau) {
+		public MauMau giveAllCardsToUserThatUserHasToTake(MauMau maumau)throws NoMoreCardsException {
 			this.ensureServicesAvailability();
 			if (maumau.getAmountSeven() > 0) {
 				for (int i = 0; i < 2 * maumau.getAmountSeven(); i++) {
@@ -190,9 +232,9 @@ private RulesService rulesService;
 		
 		
 		/*
-		 * CardDeck enthält weiterhin die Karte, die eigentlich als firstGraveyardCard auf den Ablagestapel gelegt wird
+		 * CardDeck enthï¿½lt weiterhin die Karte, die eigentlich als firstGraveyardCard auf den Ablagestapel gelegt wird
 		 * */
-		public MauMau handleGameStart(List<String> userNames, MauMauRules rules, int amountCardsForUser) {
+		public MauMau handleGameStart(List<String> userNames, MauMauRules rules, int amountCardsForUser)throws NoMoreCardsException {
 			this.ensureServicesAvailability();
 			List<MauMauUser> users = userService.createUsers(userNames);
 			CardDeck gameCardDeck = cardDeckService.createCardDeck(cardDeckService.createCards());
@@ -206,6 +248,7 @@ private RulesService rulesService;
 			shuffledGameCards.remove(0);
 			List<Card> graveyardCards = new LinkedList<Card>();
 			graveyardCards.add(firstGraveyardCard);
+			gameCardDeck.getCards().remove(firstGraveyardCard);
 			MauMau maumau = new MauMau();
 			maumau = startGame(users, gameCardDeck, new CardDeck(graveyardCards), rules, 0, false, null, 0, null,
 					maumau);
