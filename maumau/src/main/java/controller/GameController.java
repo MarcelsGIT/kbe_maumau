@@ -213,16 +213,31 @@ public class GameController implements GameUI {
 				this.maumau.getRuleSet());
 		boolean maumauPossible = ruleService.checkShoutMauMauPossible(this.maumau.getCurrentPlayer(),
 				this.maumau.getRuleSet());
+		
 		if (mauPossible) {
-			boolean mau = userCommunication.askIfUserWantsToShoutMau();
-			this.maumau = mauMauService.shoutMauProcedure(this.maumau, mau);
+			System.out.println("mauPossible");
+			if(!this.maumau.getCurrentPlayer().isVirtualUser()) {
+				boolean mau = userCommunication.askIfUserWantsToShoutMau();
+				this.maumau = mauMauService.shoutMauProcedure(this.maumau, mau);
+			} else if(this.maumau.getCurrentPlayer().isVirtualUser()) {
+				System.out.println("Virtual User shouts \"Mau!\"");
+				this.maumau = mauMauService.shoutMauProcedure(this.maumau, true);
+			}
 			this.persist(this.maumau, this.handler);
 		}
+		
 		if (maumauPossible) {
-			boolean shoutMaumau = userCommunication.askIfUserWantsToShoutMauMau();
-			this.maumau = mauMauService.shoutMauMauProcedure(this.maumau, shoutMaumau);
+			System.out.println("MauMauPossible");
+			if(!this.maumau.getCurrentPlayer().isVirtualUser()) {
+				boolean shoutMaumau = userCommunication.askIfUserWantsToShoutMauMau();
+				this.maumau = mauMauService.shoutMauMauProcedure(this.maumau, shoutMaumau);
+			} else if(this.maumau.getCurrentPlayer().isVirtualUser()) {
+				System.out.println("Virtual User shouts \"MauMau!\"");
+				this.maumau = mauMauService.shoutMauMauProcedure(this.maumau, true);
+			}
 			this.persist(this.maumau, this.handler);
 		}
+		
 		return this.maumau;
 	}
 
