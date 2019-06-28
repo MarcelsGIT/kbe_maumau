@@ -20,6 +20,7 @@ import rules.RulesService;
 import userAdministration.modell.MauMauUser;
 import util.exceptions.DbConnectionException;
 import util.exceptions.LoadGameException;
+import util.exceptions.NoMoreCardsException;
 import util.exceptions.SaveOrUpdateException;
 import userAdministration.UserService;
 import view.*;
@@ -119,16 +120,33 @@ public class GameController implements GameUI {
 					Card validCard = null;
 					if (!maumau.getCurrentPlayer().isVirtualUser()) {
 						userInformation.giveCurrentCardDeckInfo(this.maumau.getCurrentPlayer().getHand());
-						String playOrTake = userCommunication.askIfPlayCardOrTakeCard();
-						if (playOrTake.equalsIgnoreCase("t")) {
-							this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
-							this.persist(this.maumau, this.handler);
+						try {
+							String playOrTake = userCommunication.askIfPlayCardOrTakeCard();
+							if (playOrTake.equalsIgnoreCase("t")) {
+								this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
+								this.persist(this.maumau, this.handler);
 
-						} else {
+							} else {
 
-							validCard = getValidCard(maumau, lastCard, maumau.getRuleSet(), rulesService);
-							this.maumau = mauMauService.playCardProcedure(maumau, validCard);
-							this.persist(this.maumau, this.handler);
+								validCard = getValidCard(maumau, lastCard, maumau.getRuleSet(), rulesService);
+								this.maumau = mauMauService.playCardProcedure(maumau, validCard);
+								this.persist(this.maumau, this.handler);
+							}
+						}catch(NoMoreCardsException e) {
+							System.out.println("No more cards to draw");
+							//Inform user that the deck is out of cards
+							//virtual player plays for human player due to he is a dump asshole and 
+							//tries to draw cards although all cards are already drawn7
+							if(rulesService.checkIfUserCanPlay(maumau.getAmountSeven(), rules, lastCard,
+									maumau.getCurrentPlayer().getHand(), maumau.getUserwish())) {
+								validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(), maumau,
+										lastCard);
+								this.maumau = mauMauService.playCardProcedure(maumau, validCard);
+								this.persist(this.maumau, this.handler);
+							}
+						}finally {
+							
+							
 						}
 					} else if (maumau.getCurrentPlayer().isVirtualUser()) {
 						validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(), maumau,
