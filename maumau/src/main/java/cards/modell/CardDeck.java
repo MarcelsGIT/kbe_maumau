@@ -14,6 +14,10 @@ import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CardDeck.
+ */
 @Entity
 @Table(name="CardDecks")
 @Component
@@ -26,10 +30,18 @@ public class CardDeck { // entity klasse
 	@JoinColumn(name="cardDeckId", columnDefinition="INT")
 	private List<Card> cards; // kein privates Feld
 	
+	/**
+	 * Instantiates a new card deck.
+	 */
 	public CardDeck() {
 		super();
 	}
 
+	/**
+	 * Instantiates a new card deck.
+	 *
+	 * @param cards the cards
+	 */
 	public CardDeck(List<Card> cards) {
 		super();
 		for(Card card : cards) {
@@ -39,11 +51,21 @@ public class CardDeck { // entity klasse
 		this.cards = cards;
 	}
 
+	/**
+	 * Gets the cards.
+	 *
+	 * @return the cards
+	 */
 	public List<Card> getCards() {
 		return cards;
 	}
 
 
+	/**
+	 * Sets the cards.
+	 *
+	 * @param cards the new cards
+	 */
 	public void setCards(List<Card> cards) {
 		for(Card card : cards) {
 			card.setOwner(null);

@@ -9,13 +9,18 @@ import org.springframework.stereotype.Component;
 
 import cards.modell.Card;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserInputValidation.
+ */
 @Component
 public class UserInputValidation {
 
 	/**
-	 * verifies if symbol input was correct
-	 * @param input
-	 * @return true if correct, false otherwise
+	 * Verify symbol input.
+	 *
+	 * @param input the input
+	 * @return true, if successful
 	 */
 	public boolean verifySymbolInput(String input){
 
@@ -28,9 +33,10 @@ public class UserInputValidation {
 	}
 	
 	/**
-	 *  verifies if value input was correct
-	 * @param input
-	 * @return true if correct, false otherwise
+	 * Verify value input.
+	 *
+	 * @param input the input
+	 * @return true, if successful
 	 */
 	public boolean verifyValueInput(String input) {	
 		boolean correctInput = false;
@@ -44,9 +50,10 @@ public class UserInputValidation {
 	}
 	
 	/**
-	 * verifies if input about taking or playing card("t"/"p") was correct
-	 * @param input
-	 * @return true if correct, false otherwise
+	 * Verify play or take input.
+	 *
+	 * @param input the input
+	 * @return true, if successful
 	 */
 	public boolean verifyPlayOrTakeInput(String input) {
 		
@@ -60,10 +67,11 @@ public class UserInputValidation {
 	
 	
 	/**
-	 * Verifies if card that user chose is one of the cards the user has on his/her hand
-	 * @param cardList
-	 * @param inputCard
-	 * @return true if correct, false otherwise
+	 * Verify if card in user hand.
+	 *
+	 * @param cardList the card list
+	 * @param inputCard the input card
+	 * @return true, if successful
 	 */
 	public boolean verifyIfCardInUserHand(List<Card> cardList, Card inputCard) {
 		boolean correctCard = false;
@@ -79,9 +87,10 @@ public class UserInputValidation {
 	
 	
 	/**
-	 * tests if input correct
-	 * @param input
-	 * @return boolean true if user input correct, wrong otherwise
+	 * Verify yes no input.
+	 *
+	 * @param input the input
+	 * @return true, if successful
 	 */
 	public boolean verifyYesNoInput(String input) {
 		if (input.equalsIgnoreCase("j")|| input.equalsIgnoreCase("n")) {
@@ -93,9 +102,10 @@ public class UserInputValidation {
 	}
 	
 	/**
-	 * test if answer was yes or no
-	 * @param yesOrNo
-	 * @return true if yes, no otherwise
+	 * Yes or no.
+	 *
+	 * @param yesOrNo the yes or no
+	 * @return true, if successful
 	 */
 	public boolean yesOrNo(String yesOrNo) {
 		if (yesOrNo.equalsIgnoreCase("j")) {

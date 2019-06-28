@@ -13,6 +13,10 @@ import rules.management.RulesMgmt;
 import userAdministration.modell.MauMauUser;
 import virtualUserAdministration.VirtualUserService;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VirtualUserMgmt.
+ */
 @Component
 public class VirtualUserMgmt implements VirtualUserService {
 
@@ -20,6 +24,14 @@ public class VirtualUserMgmt implements VirtualUserService {
 	private RulesService ruleService;
 
 
+	/**
+	 * Play next possible card from hand.
+	 *
+	 * @param virtualMauMauUser the virtual mau mau user
+	 * @param mauMau the mau mau
+	 * @param lastPlayedCard the last played card
+	 * @return the card
+	 */
 	public Card playNextPossibleCardFromHand(MauMauUser virtualMauMauUser, MauMau mauMau, Card lastPlayedCard) {
 		ensureServicesAvailability();
 		List<Card> cards = virtualMauMauUser.getHand();
@@ -36,6 +48,13 @@ public class VirtualUserMgmt implements VirtualUserService {
 	}
 
 
+	/**
+	 * Sets the mau if possible.
+	 *
+	 * @param virtualMauMauUser the virtual mau mau user
+	 * @param mauMau the mau mau
+	 * @return the mau mau user
+	 */
 	public MauMauUser setMauIfPossible(MauMauUser virtualMauMauUser, MauMau mauMau) {
 		ensureServicesAvailability();
 		if (ruleService.checkShoutMauPossible(virtualMauMauUser, mauMau.getRuleSet())) {
@@ -47,6 +66,13 @@ public class VirtualUserMgmt implements VirtualUserService {
 	}
 
 	
+	/**
+	 * Sets the mau mau if possible.
+	 *
+	 * @param virtualMauMauUser the virtual mau mau user
+	 * @param mauMau the mau mau
+	 * @return the mau mau user
+	 */
 	public MauMauUser setMauMauIfPossible(MauMauUser virtualMauMauUser, MauMau mauMau) {
 		ensureServicesAvailability();
 		if (ruleService.checkShoutMauMauPossible(virtualMauMauUser, mauMau.getRuleSet())) {
@@ -59,6 +85,12 @@ public class VirtualUserMgmt implements VirtualUserService {
 	
 	
 	
+	/**
+	 * Make whish by taking first card symbol.
+	 *
+	 * @param virtualMauMauUser the virtual mau mau user
+	 * @return the symbol
+	 */
 	public Symbol makeWhishByTakingFirstCardSymbol(MauMauUser virtualMauMauUser) {
 		ensureServicesAvailability();
 		Symbol symbol = virtualMauMauUser.getCardInHand(0).getSymbol();
@@ -69,6 +101,9 @@ public class VirtualUserMgmt implements VirtualUserService {
 	
 	
 	
+	/**
+	 * Ensure services availability.
+	 */
 	private void ensureServicesAvailability() {
 		if(this.ruleService == null) this.ruleService = new RulesMgmt();
 	}

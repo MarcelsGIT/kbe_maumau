@@ -1,6 +1,7 @@
 carddeck\modell\test\CardDeckTest.class
 view\test\UserCommunicationTest.class
 cardGame\modell\test\CardGameTest.class
+virtualUser\modell\test\VirtualUserTest.class
 cardGameUser\modell\test\CardGameUserTest.class
 rules\modell\test\RulesTest.class
 view\test\UserInputValidationTest.class

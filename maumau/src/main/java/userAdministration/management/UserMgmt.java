@@ -8,9 +8,20 @@ import userAdministration.modell.MauMauUser;
 
 import org.springframework.stereotype.Component;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserMgmt.
+ */
 @Component
 public class UserMgmt implements UserService {
 
+	/**
+	 * Play card.
+	 *
+	 * @param index the index
+	 * @param mauMauUser the mau mau user
+	 * @return the card
+	 */
 	public Card playCard(int index, MauMauUser mauMauUser) {
 
 		// Check if index is greater than amount of cards - Check if index is maller
@@ -28,6 +39,13 @@ public class UserMgmt implements UserService {
 
 	}
 
+	/**
+	 * Take card.
+	 *
+	 * @param cardFromDeck the card from deck
+	 * @param mauMauUser the mau mau user
+	 * @return the mau mau user
+	 */
 	// Takes card to hand
 	public MauMauUser takeCard(Card cardFromDeck, MauMauUser mauMauUser) {
 
@@ -37,6 +55,12 @@ public class UserMgmt implements UserService {
 		return mauMauUser;
 	}
 
+	/**
+	 * Shout mau.
+	 *
+	 * @param mauMauUser the mau mau user
+	 * @return the string
+	 */
 	public String shoutMau(MauMauUser mauMauUser) {
 		if (mauMauUser.getHand().size() == 2) {
 			return new String("Mau!");
@@ -47,6 +71,12 @@ public class UserMgmt implements UserService {
 		}
 	}
 
+	/**
+	 * Shout mau mau.
+	 *
+	 * @param mauMauUser the mau mau user
+	 * @return the string
+	 */
 	public String shoutMauMau(MauMauUser mauMauUser) {
 		if (mauMauUser.getHand().size() == 1) {
 			return new String("MauMau!");
@@ -55,6 +85,12 @@ public class UserMgmt implements UserService {
 		}
 	}
 
+	/**
+	 * Creates the users.
+	 *
+	 * @param userNames the user names
+	 * @return the list
+	 */
 	public List<MauMauUser> createUsers(List<String> userNames) {
 		List<MauMauUser> userList = new LinkedList<MauMauUser>();
 		if (userNames.size() == 1) {

@@ -13,13 +13,27 @@ import cards.modell.Symbol;
 import cards.modell.Value;
 import util.exceptions.NoMoreCardsException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CardDeckImpl.
+ */
 @Component
 public class CardDeckImpl implements CardDeckService {
 	
+	/**
+	 * Instantiates a new card deck impl.
+	 */
 	public CardDeckImpl() {
 		super();
 	}
 
+	/**
+	 * Save card to card deck.
+	 *
+	 * @param cardDeck the card deck
+	 * @param card the card
+	 * @return the card deck
+	 */
 	public CardDeck saveCardToCardDeck(CardDeck cardDeck, Card... card) {
 		List<Card> cardList = cardDeck.getCards();
 		for (Card singleCard: card) {
@@ -30,6 +44,14 @@ public class CardDeckImpl implements CardDeckService {
 		return cardDeck;
 	}
 
+	/**
+	 * Deal cards.
+	 *
+	 * @param cardDeck the card deck
+	 * @param amount the amount
+	 * @param graveyard the graveyard
+	 * @return the list
+	 */
 	public List<Card> dealCards(CardDeck cardDeck, int amount, CardDeck graveyard) {
 		if (cardDeck.getCards().size()< amount) {
 			//cardDeck = addCardsFromGraveyard(cardDeck, graveyard);
@@ -43,12 +65,25 @@ public class CardDeckImpl implements CardDeckService {
 		return dealedCards;
 	}
 	
+	/**
+	 * Shuffle.
+	 *
+	 * @param cardDeck the card deck
+	 * @return the list
+	 */
 	public List<Card> shuffle(CardDeck cardDeck) {
 		List <Card> cardList = cardDeck.getCards();
 		Collections.shuffle(cardList);
 		return cardList;
 	}
 
+	/**
+	 * Give card.
+	 *
+	 * @param cardDeck the card deck
+	 * @param graveyard the graveyard
+	 * @return the card
+	 */
 	public Card giveCard(CardDeck cardDeck, CardDeck graveyard) {
 		if (cardDeck.getCards().size()<1) {
 			//cardDeck = addCardsFromGraveyard(cardDeck, graveyard);
@@ -58,10 +93,23 @@ public class CardDeckImpl implements CardDeckService {
 		return card;
 	}
 
+	/**
+	 * Give most recent card.
+	 *
+	 * @param cardDeck the card deck
+	 * @return the card
+	 */
 	public Card giveMostRecentCard(CardDeck cardDeck) {
 		return cardDeck.getCards().get(cardDeck.getCards().size()-1);
 	}
 	
+	/**
+	 * Adds the cards from graveyard.
+	 *
+	 * @param cardDeck the card deck
+	 * @param graveyard the graveyard
+	 * @return the card deck
+	 */
 	@Deprecated
 	public CardDeck addCardsFromGraveyard(CardDeck cardDeck, CardDeck graveyard) {
 		//List <Card> cardList = cardDeck.getCards();
@@ -82,6 +130,13 @@ public class CardDeckImpl implements CardDeckService {
 		return cardDeck;
 	}
 
+	/**
+	 * Removes the cards from card deck list.
+	 *
+	 * @param cardDeck the card deck
+	 * @param cardsToBeRemoved the cards to be removed
+	 * @return the card deck
+	 */
 	public CardDeck removeCardsFromCardDeckList(CardDeck cardDeck, List<Card> cardsToBeRemoved) {
 		List<Card> cardList = cardDeck.getCards();
 		for(Card card : cardsToBeRemoved) {
@@ -93,6 +148,13 @@ public class CardDeckImpl implements CardDeckService {
 		return cardDeck;
 	}
 	
+	/**
+	 * Removes the card from card deck list.
+	 *
+	 * @param cards the cards
+	 * @param cardToBeRemoved the card to be removed
+	 * @return the list
+	 */
 	public List<Card> removeCardFromCardDeckList(List<Card> cards, Card cardToBeRemoved) {
 		for (int i=0; i<cards.size(); i++) {
 			if (cards.get(i).getSymbol() == cardToBeRemoved.getSymbol()&& cards.get(i).getValue()==cardToBeRemoved.getValue()) {
@@ -102,6 +164,11 @@ public class CardDeckImpl implements CardDeckService {
 		return cards;
 	}
 
+	/**
+	 * Creates the cards.
+	 *
+	 * @return the list
+	 */
 	public List<Card> createCards() {
 		List <Card> cards = new LinkedList <Card>();
 		for (Symbol symbol : Symbol.values()) {
@@ -112,6 +179,12 @@ public class CardDeckImpl implements CardDeckService {
 		return cards;
 	}
 
+	/**
+	 * Creates the card deck.
+	 *
+	 * @param cardsList the cards list
+	 * @return the card deck
+	 */
 	public CardDeck createCardDeck(List<Card> cardsList) {
 		CardDeck newCardDeck = new CardDeck(cardsList);
 		return newCardDeck;

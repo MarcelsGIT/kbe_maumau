@@ -9,20 +9,35 @@ import org.springframework.stereotype.Component;
 
 import cardGame.modell.MauMau;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class WelcomeGame.
+ */
 @Component
 public class WelcomeGame {
 
 	private Scanner input;
 
+	/**
+	 * Instantiates a new welcome game.
+	 */
 	public WelcomeGame() {
 		this.input = new Scanner(System.in);
 	}
 
+	/**
+	 * Welcome msg.
+	 */
 	public void welcomeMsg() {
 		System.out.println("Hello and Welcome to MauMau!");
 
 	}
 
+	/**
+	 * Ask how many users.
+	 *
+	 * @return the int
+	 */
 	public int askHowManyUsers() {
 		int userAmount = 0;
 		boolean correctInput = false;
@@ -53,6 +68,12 @@ public class WelcomeGame {
 		return userAmount;
 	}
 
+	/**
+	 * Ask user names.
+	 *
+	 * @param amountPlayers the amount players
+	 * @return the list
+	 */
 	public List<String> askUserNames(int amountPlayers) {
 		List<String> userNames = new ArrayList<>();
 		String userName = "";
@@ -68,6 +89,12 @@ public class WelcomeGame {
 		return userNames;
 	}
 
+	/**
+	 * Ask return to existing game.
+	 *
+	 * @param unfinishedGames the unfinished games
+	 * @return the mau mau
+	 */
 	public MauMau askReturnToExistingGame(List<MauMau> unfinishedGames) {
 		System.out.println(
 				"There are unfinished Games for the current users.\nDo you want to Return to an existing Game?");

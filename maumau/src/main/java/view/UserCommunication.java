@@ -10,6 +10,10 @@ import cards.modell.Symbol;
 import cards.modell.Value;
 import userAdministration.modell.CardGameUser;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserCommunication.
+ */
 @Component
 public class UserCommunication {
 
@@ -20,8 +24,9 @@ public class UserCommunication {
 	
 	
 	/**
-	 * asks user if user wants to shout mau
-	 * @return boolean whether user wants to shout mau or not
+	 * Ask if user wants to shout mau.
+	 *
+	 * @return true, if successful
 	 */
 	public boolean askIfUserWantsToShoutMau() {
 		System.out.println("Hey, you have two cards left! Would you like to shout mau?");
@@ -31,8 +36,9 @@ public class UserCommunication {
 	}
 	
 	/**
-	 * asks user if user wants to shout maumau
-	 * @return boolean whether user wants to shout maumau or not
+	 * Ask if user wants to shout mau mau.
+	 *
+	 * @return true, if successful
 	 */
 	public boolean askIfUserWantsToShoutMauMau() {
 		System.out.println("Hey, you have one card left - would you like to shout maumau?");
@@ -44,9 +50,11 @@ public class UserCommunication {
 	
 	
 
-	/** gets user wish 
-	 * @param wishingUser
-	 * @return String that contains symbol
+	/**
+	 * Ask for user wish.
+	 *
+	 * @param wishingUser the wishing user
+	 * @return the string
 	 */
 	public String askForUserWish(CardGameUser wishingUser) {
 		System.out.println(wishingUser.getUsername() + ", what's your wish? Please answer by typing the symbol");
@@ -58,8 +66,9 @@ public class UserCommunication {
 
 
 	/**
-	 * asks is user wants to take or play a card
-	 * @return playOrTake: "p" ion case of play, "t" in case of take card
+	 * Ask if play card or take card.
+	 *
+	 * @return the string
 	 */
 	public String askIfPlayCardOrTakeCard() {
 		System.out.println("Do you want to play a card (PRESS \"P\") or do you want to take a card?(PRESS \"T\")");
@@ -76,9 +85,10 @@ public class UserCommunication {
 	}
 
 	/**
-	 * asks which card user wants top play
-	 * @param user
-	 * @return card that user wants to play
+	 * Ask for card user wants to play.
+	 *
+	 * @param user the user
+	 * @return the int
 	 */
 	public int askForCardUserWantsToPlay(CardGameUser user) {
 		boolean cardInHand = false;
@@ -107,8 +117,9 @@ public class UserCommunication {
 	}
 
 	/**
-	 * takes user input for Symbol
-	 * @return symbol as String
+	 * Symbol input communication.
+	 *
+	 * @return the string
 	 */
 	public String symbolInputCommunication() {
 		String symbol = "";
@@ -125,8 +136,9 @@ public class UserCommunication {
 	}
 
 	/**
-	 * takes user input for Value
-	 * @return value as String
+	 * Value input communication.
+	 *
+	 * @return the string
 	 */
 	public String valueInputCommunication() {
 		String value = "";
@@ -142,9 +154,10 @@ public class UserCommunication {
 	}
 
 	/**
-	 * Converts String to Symbol
-	 * @param input symbol String
-	 * @return Symbol
+	 * Gets the symbol from string.
+	 *
+	 * @param input the input
+	 * @return the symbol from string
 	 */
 	public Symbol getSymbolFromString(String input) {
 		Symbol symbol = null;
@@ -158,9 +171,10 @@ public class UserCommunication {
 	}
 
 	/**
-	 * Converts String to Value
-	 * @param input value String
-	 * @return value
+	 * Gets the value from string.
+	 *
+	 * @param input the input
+	 * @return the value from string
 	 */
 	public Value getValueFromString(String input) {
 		Value value = null;
@@ -174,6 +188,11 @@ public class UserCommunication {
 	}
 
 	
+	/**
+	 * Gets the anwer to yes or no question.
+	 *
+	 * @return the anwer to yes or no question
+	 */
 	public String getAnwerToYesOrNoQuestion() {
 		System.out.println("For \"yes\" please type \"j\" for \"no\" please type \"n\"");
 				String answer = "";
@@ -188,6 +207,12 @@ public class UserCommunication {
 				
 	}
 	
+	/**
+	 * Play again.
+	 *
+	 * @param mauMau the mau mau
+	 * @return true, if successful
+	 */
 	public boolean playAgain(MauMau mauMau) {
 		boolean playAgain = false;
 		if(mauMau.getWinner() != null) {

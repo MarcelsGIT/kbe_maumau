@@ -20,9 +20,19 @@ import util.exceptions.DbConnectionException;
 import util.exceptions.LoadGameException;
 import util.exceptions.SaveOrUpdateException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PersistenceMgmt.
+ */
 @Component
 public class PersistenceMgmt implements PersistenceService {
 
+	/**
+	 * Persist game.
+	 *
+	 * @param maumau the maumau
+	 * @param handler the handler
+	 */
 	@Override
 	public void persistGame(MauMau maumau, JPAHandler handler) {
 		// TODO Auto-generated method stub
@@ -38,6 +48,13 @@ public class PersistenceMgmt implements PersistenceService {
 		
 	}
 
+	/**
+	 * Establish connection.
+	 *
+	 * @param instanceName the instance name
+	 * @param handler the handler
+	 * @return the JPA handler
+	 */
 	@Override
 	public JPAHandler establishConnection(String instanceName, JPAHandler handler) {
 		// TODO Auto-generated method stub
@@ -49,6 +66,13 @@ public class PersistenceMgmt implements PersistenceService {
 		return handler;
 	}
 
+	/**
+	 * Load games.
+	 *
+	 * @param handler the handler
+	 * @param userNames the user names
+	 * @return the list
+	 */
 	@Override
 	public List<MauMau> loadGames(JPAHandler handler, List<String> userNames) {
 		// TODO Auto-generated method stub

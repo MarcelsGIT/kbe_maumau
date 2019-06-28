@@ -26,6 +26,10 @@ import userAdministration.UserService;
 import view.*;
 import virtualUserAdministration.VirtualUserService;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GameController.
+ */
 @Controller
 public class GameController implements GameUI {
 
@@ -72,6 +76,9 @@ public class GameController implements GameUI {
 
 	private boolean persistGames;
 
+	/**
+	 * Run.
+	 */
 	public void run() {
 		this.persistGames = true;
 		this.establishDbConnection();
@@ -212,6 +219,15 @@ public class GameController implements GameUI {
 
 	}
 
+	/**
+	 * Gets the valid card.
+	 *
+	 * @param maumau the maumau
+	 * @param mostRecentCard the most recent card
+	 * @param mauMauRules the mau mau rules
+	 * @param ruleservice the ruleservice
+	 * @return the valid card
+	 */
 	public Card getValidCard(MauMau maumau, Card mostRecentCard, MauMauRules mauMauRules, RulesService ruleservice) {
 		boolean valid = false;
 		Card card = null;
@@ -226,6 +242,13 @@ public class GameController implements GameUI {
 		return card;
 	}
 
+	/**
+	 * Handle mau and mau mau procedure.
+	 *
+	 * @param maumau the maumau
+	 * @param ruleService the rule service
+	 * @return the mau mau
+	 */
 	public MauMau handleMauAndMauMauProcedure(MauMau maumau, RulesService ruleService) {
 		boolean mauPossible = ruleService.checkShoutMauPossible(this.maumau.getCurrentPlayer(),
 				this.maumau.getRuleSet());
@@ -259,6 +282,9 @@ public class GameController implements GameUI {
 		return this.maumau;
 	}
 
+	/**
+	 * Establish db connection.
+	 */
 	private void establishDbConnection() {
 		try {
 			this.persistenceService.establishConnection("maumau", handler);
@@ -270,6 +296,12 @@ public class GameController implements GameUI {
 		}
 	}
 
+	/**
+	 * Load games.
+	 *
+	 * @param userNames the user names
+	 * @return the list
+	 */
 	private List<MauMau> loadGames(List<String> userNames) {
 		try {
 			if (this.persistGames)
@@ -281,6 +313,12 @@ public class GameController implements GameUI {
 
 	}
 
+	/**
+	 * Persist.
+	 *
+	 * @param maumau the maumau
+	 * @param handler the handler
+	 */
 	private void persist(MauMau maumau, JPAHandler handler) {
 		try {
 			if (this.persistGames)

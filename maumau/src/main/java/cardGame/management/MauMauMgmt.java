@@ -22,6 +22,10 @@ import userAdministration.management.UserMgmt;
 import userAdministration.modell.MauMauUser;
 import util.exceptions.NoMoreCardsException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MauMauMgmt.
+ */
 @Component
 public class MauMauMgmt implements MauMauService {
 
@@ -35,6 +39,21 @@ private RulesService rulesService;
 	
 	
 
+		/**
+		 * Start game.
+		 *
+		 * @param userList the user list
+		 * @param cardDeck the card deck
+		 * @param graveyard the graveyard
+		 * @param rules the rules
+		 * @param currentPlayerIndex the current player index
+		 * @param endGame the end game
+		 * @param winner the winner
+		 * @param amountSeven the amount seven
+		 * @param userwish the userwish
+		 * @param mauMau the mau mau
+		 * @return the mau mau
+		 */
 		public MauMau startGame(List<MauMauUser> userList, CardDeck cardDeck, CardDeck graveyard, MauMauRules rules,
 				int currentPlayerIndex, boolean endGame, MauMauUser winner, int amountSeven, Symbol userwish, MauMau mauMau) {
 			this.ensureServicesAvailability();
@@ -49,18 +68,33 @@ private RulesService rulesService;
 			return mauMau;
 		}
 
+		/**
+		 * Choose who starts.
+		 *
+		 * @param mauMau the mau mau
+		 * @return the mau mau
+		 */
 		// Kaan
 		public MauMau chooseWhoStarts(MauMau mauMau) {
 			this.ensureServicesAvailability();
-			List<MauMauUser> allPlayers = mauMau.getPlayers();
 			int randomIndex = (int) Math.random() * mauMau.getPlayers().size();
-			MauMauUser starterPlayer = allPlayers.get(randomIndex);
+			MauMauUser starterPlayer = mauMau.getPlayers().get(randomIndex);
 			mauMau.setCurrentPlayer(starterPlayer);
 			return mauMau;
 		}
 		
+		/**
+		 * Transfer cards from graveyard to card deck.
+		 *
+		 * @param maumau the maumau
+		 * @return the mau mau
+		 * @throws NoMoreCardsException the no more cards exception
+		 */
 		//Marcel
 		public MauMau transferCardsFromGraveyardToCardDeck(MauMau maumau)throws NoMoreCardsException {
+			if(maumau.getGraveyard().getCards().size() <= 1) {
+				throw new NoMoreCardsException();
+			}
 			Card lastPlayedCard = maumau.getGraveyard().getCards().get(maumau.getGraveyard().getCards().size() -1);
 			for(Card card : maumau.getGraveyard().getCards()) {
 				if(card != lastPlayedCard) {
@@ -79,6 +113,12 @@ private RulesService rulesService;
 			return maumau;
 		}
 
+		/**
+		 * Next player.
+		 *
+		 * @param mauMau the mau mau
+		 * @return the mau mau
+		 */
 		// Marcel
 		public MauMau nextPlayer(MauMau mauMau) {
 			this.ensureServicesAvailability();
@@ -92,6 +132,13 @@ private RulesService rulesService;
 			return mauMau;
 		}
 
+		/**
+		 * End game.
+		 *
+		 * @param mauMau the mau mau
+		 * @param endGame the end game
+		 * @return the mau mau
+		 */
 		// Kaan
 		public MauMau endGame(MauMau mauMau, boolean endGame) {
 			this.ensureServicesAvailability();
@@ -99,6 +146,13 @@ private RulesService rulesService;
 			return mauMau;
 		}
 
+		/**
+		 * Insert winner.
+		 *
+		 * @param user the user
+		 * @param mauMau the mau mau
+		 * @return the mau mau
+		 */
 		// No need right now
 		public MauMau insertWinner(MauMauUser user, MauMau mauMau) {
 			this.ensureServicesAvailability();
@@ -107,6 +161,13 @@ private RulesService rulesService;
 
 		}
 
+		/**
+		 * Skip round.
+		 *
+		 * @param user the user
+		 * @param mauMau the mau mau
+		 * @return the mau mau
+		 */
 		// Marcel
 		public MauMau skipRound(MauMauUser user, MauMau mauMau) {
 			this.ensureServicesAvailability();
@@ -120,6 +181,13 @@ private RulesService rulesService;
 			return mauMau;
 		}
 
+		/**
+		 * Deal penalty cards.
+		 *
+		 * @param amount the amount
+		 * @param mauMau the mau mau
+		 * @return the list
+		 */
 		// Marcel
 		public List<Card> dealPenaltyCards(int amount, MauMau mauMau) {
 			this.ensureServicesAvailability();
@@ -135,6 +203,14 @@ private RulesService rulesService;
 			return deal;
 		}
 
+		/**
+		 * Deal cards to players.
+		 *
+		 * @param maumau the maumau
+		 * @param amountCard the amount card
+		 * @return the mau mau
+		 * @throws NoMoreCardsException the no more cards exception
+		 */
 		public MauMau dealCardsToPlayers(MauMau maumau, int amountCard)throws NoMoreCardsException {
 			this.ensureServicesAvailability();
 			//List<MauMauUser> userList = maumau.getPlayers();
@@ -169,6 +245,13 @@ private RulesService rulesService;
 			return maumau;
 		}
 
+		/**
+		 * Give card to user.
+		 *
+		 * @param maumau the maumau
+		 * @return the mau mau
+		 * @throws NoMoreCardsException the no more cards exception
+		 */
 		public MauMau giveCardToUser(MauMau maumau)throws NoMoreCardsException {
 			this.ensureServicesAvailability();
 			CardDeck cardDeck = maumau.getDeck();
@@ -176,7 +259,6 @@ private RulesService rulesService;
 			try {
 				card = cardDeckService.giveCard(maumau.getDeck(), maumau.getGraveyard());
 			}catch(NoMoreCardsException e) {
-				e.printFailureMessage();
 				maumau = this.transferCardsFromGraveyardToCardDeck(maumau);
 				card = cardDeckService.giveCard(maumau.getDeck(), maumau.getGraveyard());
 			}
@@ -187,6 +269,13 @@ private RulesService rulesService;
 		}
 
 		
+		/**
+		 * Give all cards to user that user has to take.
+		 *
+		 * @param maumau the maumau
+		 * @return the mau mau
+		 * @throws NoMoreCardsException the no more cards exception
+		 */
 		public MauMau giveAllCardsToUserThatUserHasToTake(MauMau maumau)throws NoMoreCardsException {
 			this.ensureServicesAvailability();
 			if (maumau.getAmountSeven() > 0) {
@@ -202,6 +291,13 @@ private RulesService rulesService;
 		
 		
 		
+		/**
+		 * Play card procedure.
+		 *
+		 * @param maumau the maumau
+		 * @param validCard the valid card
+		 * @return the mau mau
+		 */
 		public MauMau playCardProcedure(MauMau maumau, Card validCard) {
 			this.ensureServicesAvailability();
 			maumau.getGraveyard().getCards().add(validCard);
@@ -210,6 +306,13 @@ private RulesService rulesService;
 			return maumau;
 		}
 		
+		/**
+		 * Shout mau procedure.
+		 *
+		 * @param maumau the maumau
+		 * @param mau the mau
+		 * @return the mau mau
+		 */
 		public MauMau shoutMauProcedure(MauMau maumau, boolean mau) {
 			this.ensureServicesAvailability();
 			if (mau) {
@@ -220,6 +323,13 @@ private RulesService rulesService;
 			return maumau;
 		}
 		
+		/**
+		 * Shout mau mau procedure.
+		 *
+		 * @param maumau the maumau
+		 * @param shoutMaumau the shout maumau
+		 * @return the mau mau
+		 */
 		public MauMau shoutMauMauProcedure(MauMau maumau, boolean shoutMaumau) {
 			this.ensureServicesAvailability();
 			if (shoutMaumau) {
@@ -231,6 +341,15 @@ private RulesService rulesService;
 		}
 		
 		
+		/**
+		 * Handle game start.
+		 *
+		 * @param userNames the user names
+		 * @param rules the rules
+		 * @param amountCardsForUser the amount cards for user
+		 * @return the mau mau
+		 * @throws NoMoreCardsException the no more cards exception
+		 */
 		/*
 		 * CardDeck enth�lt weiterhin die Karte, die eigentlich als firstGraveyardCard auf den Ablagestapel gelegt wird
 		 * */
@@ -259,6 +378,9 @@ private RulesService rulesService;
 			return maumau;
 		}
 		
+		/**
+		 * Ensure services availability.
+		 */
 		private void ensureServicesAvailability() {
 			if(this.cardDeckService == null) this.cardDeckService = new CardDeckImpl();
 			if(this.rulesService == null) this.rulesService = new RulesMgmt();
