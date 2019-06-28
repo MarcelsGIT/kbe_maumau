@@ -18,6 +18,11 @@ import userAdministration.modell.MauMauUser;
 @Component
 public class UserInformation {
 
+	public void noMoreCards() {
+		System.out.println(
+				"No more cards to draw. If you can play, you will be forced to play, if not, you are lucky because you did not have to take a card.");
+	}
+
 	/**
 	 * Welcome to game.
 	 *
@@ -25,7 +30,7 @@ public class UserInformation {
 	 */
 	public void welcomeToGame(MauMau maumau) {
 		List<MauMauUser> players = maumau.getPlayers();
-		if(players != null) {
+		if (players != null) {
 			for (MauMauUser player : players) {
 				System.out.println("Hello " + player.getUsername());
 				System.out.println("Welcome to the game and good luck!");
@@ -80,24 +85,22 @@ public class UserInformation {
 	/**
 	 * Give take cards info.
 	 *
-	 * @param user the user
+	 * @param user        the user
 	 * @param cardsToTake the cards to take
 	 */
 	public void giveTakeCardsInfo(CardGameUser user, int cardsToTake) {
-		System.out.println("Sorry " + user.getUsername() + " you had to take "+ cardsToTake + " cards..");
+		System.out.println("Sorry " + user.getUsername() + " you had to take " + cardsToTake + " cards..");
 	}
 
 	/**
 	 * Inform user about other users wish.
 	 *
 	 * @param userWhoWished the user who wished
-	 * @param userWish the user wish
+	 * @param userWish      the user wish
 	 */
 	public void informUserAboutOtherUsersWish(CardGameUser userWhoWished, Symbol userWish) {
 		System.out.println("The user wish which has to be fulfilled is " + userWish);
 	}
-	
-	
 
 	/**
 	 * Inform about valid symbols.
@@ -118,7 +121,7 @@ public class UserInformation {
 			System.out.print(" " + value.toString() + " ");
 		}
 	}
-	
+
 	/**
 	 * Inform about missing permission for users action.
 	 */
@@ -132,22 +135,23 @@ public class UserInformation {
 	 * @param maumau the maumau
 	 */
 	public void informAboutEndOfGame(MauMau maumau) {
-		System.out.println("Congratulations "+ maumau.getWinner().getUsername() + ", you won this game!");
-	
+		System.out.println("Congratulations " + maumau.getWinner().getUsername() + ", you won this game!");
+
 	}
-	
+
 	/**
 	 * Inform about cards that were taken.
 	 *
 	 * @param amountSeven the amount seven
 	 */
-	public void informAboutCardsThatWereTaken(int amountSeven){
+	public void informAboutCardsThatWereTaken(int amountSeven) {
 		if (amountSeven == 0) {
 			System.out.println("You couldn't play because you had no fitting cards. Thus, you had to take a card");
-		}else {
-			System.out.println("You couldn't play because you had no 7. Thus you had to take " + amountSeven*2 + " cards");
+		} else {
+			System.out.println(
+					"You couldn't play because you had no 7. Thus you had to take " + amountSeven * 2 + " cards");
 		}
-		
+
 	}
-	
+
 }

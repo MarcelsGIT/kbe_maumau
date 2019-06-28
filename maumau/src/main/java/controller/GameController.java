@@ -140,7 +140,7 @@ public class GameController implements GameUI {
 								this.persist(this.maumau, this.handler);
 							}
 						}catch(NoMoreCardsException e) {
-							System.out.println("No more cards to draw");
+							userInformation.noMoreCards();
 							//Inform user that the deck is out of cards
 							//virtual player plays for human player due to he is a dump asshole and 
 							//tries to draw cards although all cards are already drawn7
@@ -151,18 +151,18 @@ public class GameController implements GameUI {
 								this.maumau = mauMauService.playCardProcedure(maumau, validCard);
 								this.persist(this.maumau, this.handler);
 							}
-						}finally {
-							
-							
 						}
+//							finally {
+//							
+//							
+//						}
 					} else if (maumau.getCurrentPlayer().isVirtualUser()) {
 						validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(), maumau,
 								lastCard);
 						this.maumau = mauMauService.playCardProcedure(maumau, validCard);
 						this.persist(this.maumau, this.handler);
 					}
-//					this.maumau = mauMauService.playCardProcedure(maumau, validCard);
-//					this.persist(this.maumau, this.handler);
+
 
 					// Checks if the user has won:
 					if (this.maumau.getCurrentPlayer().getHand().size() == 0
