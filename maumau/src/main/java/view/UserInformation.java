@@ -17,6 +17,10 @@ import userAdministration.modell.MauMauUser;
  */
 @Component
 public class UserInformation {
+	
+	public void noMoreCardNextRoundWithoutTakingCards() {
+		System.out.println("You could not play but lucky for you there are no more cards to take!");
+	}
 
 	public void noMoreCards() {
 		System.out.println(

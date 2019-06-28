@@ -105,15 +105,24 @@ public class GameController implements GameUI {
 
 				userInformation.giveCurrentTopCardInfo(lastCard);
 				userInformation.giveInfoAboutCurrentPlayer(this.maumau.getCurrentPlayer());
-
+				
+				
 				if (!rulesService.checkIfUserCanPlay(maumau.getAmountSeven(), rules, lastCard,
 						maumau.getCurrentPlayer().getHand(), maumau.getUserwish())) {
 					userInformation.informAboutCardsThatWereTaken(this.maumau.getAmountSeven());
+					try {
 					this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(this.maumau);
+					}catch(NoMoreCardsException e) {
+						userInformation.noMoreCardNextRoundWithoutTakingCards();
+						maumau.setAmountSeven(0);
+						this.maumau = mauMauService.nextPlayer(this.maumau);
+						this.persist(this.maumau, this.handler);
+						continue;
+					}
 					this.persist(this.maumau, this.handler);
 					this.maumau = mauMauService.nextPlayer(this.maumau);
 					this.persist(this.maumau, this.handler);
-
+				
 				} else {
 
 					if (rulesService.isBube(lastCard, rules)) {
@@ -149,6 +158,7 @@ public class GameController implements GameUI {
 								validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(), maumau,
 										lastCard);
 								this.maumau = mauMauService.playCardProcedure(maumau, validCard);
+								this.maumau.setAmountSeven(0);
 								this.persist(this.maumau, this.handler);
 							}
 						}
@@ -219,6 +229,7 @@ public class GameController implements GameUI {
 
 	}
 
+	
 	/**
 	 * Gets the valid card.
 	 *
