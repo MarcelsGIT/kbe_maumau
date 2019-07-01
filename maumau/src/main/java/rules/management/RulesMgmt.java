@@ -259,7 +259,12 @@ public class RulesMgmt implements RulesService {
 		boolean valid = false;
 		if (isBube(mostRecentCard, mauMauRules)) {
 			valid = checkIfUserWishFulfilled(card, userwish);
-		} else {
+		}else if(isSeven(mostRecentCard, mauMauRules)) {
+			if (card.getValue() == Value.SEVEN) {
+				valid = true;
+				}
+			
+		}else {
 			valid = checkIsValid(mostRecentCard, card, mauMauRules);
 		}
 		return valid;
