@@ -192,11 +192,22 @@ private RulesService rulesService;
 		public List<Card> dealPenaltyCards(int amount, MauMau mauMau) {
 			this.ensureServicesAvailability();
 			// TODO Auto-generated method stub
+			if(amount > mauMau.getDeck().getCards().size())
+				mauMau = this.transferCardsFromGraveyardToCardDeck(mauMau);
+			
 			List<Card> deal = new LinkedList<Card>();
 			for (int i = 0; i < amount; i++) {
-
-				deal.add(mauMau.getDeck().getCards().get(i));
-				mauMau.getDeck().getCards().remove(i);
+				try {
+					Card card = mauMau.getDeck().getCards().get(i);
+					card.setDeck(null);
+					card.setOwner(mauMau.getCurrentPlayer());
+					deal.add(card);
+					mauMau.getDeck().getCards().remove(i);
+				}catch(NoMoreCardsException e) {
+					return deal;
+				}catch(IndexOutOfBoundsException ie) {
+					return deal;
+				}
 
 			}
 
