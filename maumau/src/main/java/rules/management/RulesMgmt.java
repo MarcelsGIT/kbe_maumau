@@ -262,7 +262,7 @@ public class RulesMgmt implements RulesService {
 		}else if(isSeven(mostRecentCard, mauMauRules)) {
 			if (card.getValue() == Value.SEVEN) {
 				valid = true;
-				}
+			}
 			
 		}else {
 			valid = checkIsValid(mostRecentCard, card, mauMauRules);
