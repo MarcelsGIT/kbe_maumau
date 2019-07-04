@@ -70,7 +70,7 @@ public interface MauMauService {
 	 * 
 	 * @return The user's new hand 
 	 */
-	List<Card> dealPenaltyCards(int amount, MauMau mauMau);
+	MauMau dealPenaltyCards(int amount, MauMau mauMau);
 	
 	
 	

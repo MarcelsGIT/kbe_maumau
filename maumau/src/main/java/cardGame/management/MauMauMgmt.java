@@ -189,7 +189,7 @@ private RulesService rulesService;
 		 * @return the list
 		 */
 		// Marcel
-		public List<Card> dealPenaltyCards(int amount, MauMau mauMau) {
+		public MauMau dealPenaltyCards(int amount, MauMau mauMau) {
 			this.ensureServicesAvailability();
 			// TODO Auto-generated method stub
 			if(amount > mauMau.getDeck().getCards().size())
@@ -203,15 +203,17 @@ private RulesService rulesService;
 					card.setOwner(mauMau.getCurrentPlayer());
 					deal.add(card);
 					mauMau.getDeck().getCards().remove(i);
+					mauMau.getPlayers().get(mauMau.getCurrentPlayerIndex()).addCardToHand(card);
+					//mauMau.getCurrentPlayer().addCardToHand(card);
 				}catch(NoMoreCardsException e) {
-					return deal;
+					return mauMau;
 				}catch(IndexOutOfBoundsException ie) {
-					return deal;
+					return mauMau;
 				}
 
 			}
 
-			return deal;
+			return mauMau;
 		}
 
 		/**

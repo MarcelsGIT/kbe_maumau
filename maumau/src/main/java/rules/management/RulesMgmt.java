@@ -68,7 +68,7 @@ public class RulesMgmt implements RulesService {
 	 * @param rules the rules
 	 * @return true, if successful
 	 */
-	public boolean checkIsValid(Card lastCard, Card userCard, MauMauRules rules) {
+	public boolean checkIsValid(Card lastCard, Card userCard, Symbol userWish, MauMauRules rules) {
 		boolean valid = false;
 		if( rules.isJackOnJack() && (lastCard.getValue() == Value.JACK && userCard.getValue() == Value.JACK) ) {
 			valid = true;
@@ -77,6 +77,8 @@ public class RulesMgmt implements RulesService {
 		}else if( lastCard.getSymbol() == userCard.getSymbol() ) {
 			valid = true;
 		}else if(lastCard.getValue() == userCard.getValue() && !(lastCard.getValue() == Value.JACK)) {
+			valid = true;
+		}else if(userWish != null && userCard.getSymbol() == userWish && !(userCard.getValue() == Value.JACK)) {
 			valid = true;
 		}
 		return valid;
@@ -165,14 +167,14 @@ public class RulesMgmt implements RulesService {
 	 * @param userWish the user wish
 	 * @return true, if successful
 	 */
-	public boolean checkIfUserCanPlay(int amountSeven, MauMauRules rules, Card lastCard, List<Card> userCards, Symbol userWish) {
+	public boolean checkIfUserCanPlay(int amountSeven, MauMauRules rules, Card mostRecentCard, List<Card> userCards, Symbol userWish) {
 		boolean canPlay = false;
-		if (isSeven(lastCard, rules) && amountSeven>0) {
+		if (isSeven(mostRecentCard, rules) && amountSeven>0) {
 			canPlay = checkIfUserHasSeven(userCards);
-		} else if (isBube(lastCard, rules)) {
+		} else if (isBube(mostRecentCard, rules)) {
 			canPlay = checkIfUserHasWishedSymbol(userCards, userWish);
 		} else {
-			canPlay = checkIfUserHasFittingCard(userCards, lastCard, rules);
+			canPlay = checkIfUserHasFittingCard(userCards, mostRecentCard, userWish, rules);
 		}
 		return canPlay;
 
@@ -220,10 +222,10 @@ public class RulesMgmt implements RulesService {
 	 * @param rules the rules
 	 * @return true, if successful
 	 */
-	public boolean checkIfUserHasFittingCard(List<Card> userCards, Card lastCard, MauMauRules rules) {
+	public boolean checkIfUserHasFittingCard(List<Card> userCards, Card lastCard, Symbol userWish, MauMauRules rules) {
 		boolean hasFittingCard = false;
 		for (Card card : userCards) {
-			if (checkIsValid(lastCard, card, rules)) {
+			if (checkIsValid(lastCard, card, userWish, rules)) {
 				hasFittingCard = true;
 			}
 		}
@@ -265,7 +267,7 @@ public class RulesMgmt implements RulesService {
 			}
 			
 		}else {
-			valid = checkIsValid(mostRecentCard, card, mauMauRules);
+			valid = checkIsValid(mostRecentCard, card, userwish, mauMauRules);
 		}
 		return valid;
 	}

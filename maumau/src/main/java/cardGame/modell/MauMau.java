@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import org.springframework.stereotype.Component;
 
 import cards.CardDeckService;
+import cards.modell.Card;
 import cards.modell.CardDeck;
 import cards.modell.Symbol;
 import rules.RulesService;
@@ -337,6 +338,5 @@ public class MauMau {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
-	
+
 }

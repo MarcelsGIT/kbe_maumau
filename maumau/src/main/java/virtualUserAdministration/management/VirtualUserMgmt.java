@@ -37,7 +37,8 @@ public class VirtualUserMgmt implements VirtualUserService {
 		List<Card> cards = virtualMauMauUser.getHand();
 		Card validCard = null;
 		for (Card card : cards) {
-			if (ruleService.validCardOrNotValidCard(lastPlayedCard, card, mauMau.getUserwish(), mauMau.getRuleSet())) {
+			//if (ruleService.validCardOrNotValidCard(lastPlayedCard, card, mauMau.getUserwish(), mauMau.getRuleSet())) {
+			if(ruleService.checkIsValid(lastPlayedCard, card, mauMau.getUserwish(), mauMau.getRuleSet())) {
 				validCard = card;
 				break;
 			}

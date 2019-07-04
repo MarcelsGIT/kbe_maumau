@@ -42,7 +42,7 @@ public interface RulesService {
 	 * @param maumau
 	 * @return the card that the user wishes
 	 */
-	boolean checkIsValid(Card lastCard, Card userCard, MauMauRules mauMauRules);
+	boolean checkIsValid(Card lastCard, Card userCard, Symbol userWish, MauMauRules mauMauRules);
 	
 	
 	/**
@@ -74,7 +74,7 @@ public interface RulesService {
 	 * @param userHand user's cards
 	 * @return bollean if user could play or not
 	 */
-	boolean checkIfUserCanPlay(int amountSeven, MauMauRules rules, Card lastCard, List<Card> userHand, Symbol userWish);
+	boolean checkIfUserCanPlay(int amountSeven, MauMauRules rules, Card mostRecentCard, List<Card> userHand, Symbol userWish);
 	
 	/**
 	 * checks if card is special or normal card
