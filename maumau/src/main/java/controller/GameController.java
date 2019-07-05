@@ -134,9 +134,9 @@ public class GameController implements GameUI {
 					// User plays card here:
 					Card validCard = null;
 					if (!maumau.getCurrentPlayer().isVirtualUser()) {
-						userInformation.giveCurrentCardDeckInfo(this.maumau.getCurrentPlayer().getHand());
+						//userInformation.giveCurrentCardDeckInfo(this.maumau.getCurrentPlayer().getHand());
 						try {
-							String playOrTake = userCommunication.askIfPlayCardOrTakeCard();
+							/*String playOrTake = userCommunication.askIfPlayCardOrTakeCard();
 							if (playOrTake.equalsIgnoreCase("t")) {
 								this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
 								this.persist(this.maumau, this.handler);
@@ -146,7 +146,8 @@ public class GameController implements GameUI {
 								validCard = getValidCard(mostRecentCard);
 								this.maumau = mauMauService.playCardProcedure(maumau, validCard);
 								this.persist(this.maumau, this.handler);
-							}
+							}*/
+							this.getValidCard(mostRecentCard);
 						} catch (NoMoreCardsException e) {
 							userInformation.noMoreCards();
 							// Inform user that the deck is out of cards
@@ -170,15 +171,15 @@ public class GameController implements GameUI {
 						// virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(),
 						// maumau,
 						// mostRecentCard);
-						validCard = this.getValidCard(mostRecentCard);
+						//validCard = this.getValidCard(mostRecentCard);
 						// if the virtualUser has played a Jack the user wish is set
 						// if(validCard != null && this.rulesService.isBube(validCard, this.rules))
 						// this.maumau.setUserwish(virtualUserService.makeWhishByTakingFirstCardSymbol(lastPlayer));
+						this.getValidCard(mostRecentCard);
+						//this.maumau = validCard != null ? mauMauService.playCardProcedure(maumau, validCard)
+						//		: mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
 
-						this.maumau = validCard != null ? mauMauService.playCardProcedure(maumau, validCard)
-								: mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
-
-						this.persist(this.maumau, this.handler);
+						//this.persist(this.maumau, this.handler);
 					}
 
 					// Checks if the user has won:
@@ -260,20 +261,36 @@ public class GameController implements GameUI {
 	 * card; }
 	 */
 
-	public Card getValidCard(Card mostRecentCard) {
+	public void getValidCard(Card mostRecentCard) {
 		boolean valid = false;
 		Card card = null;
 		while (valid == false) {
 			if (maumau.getCurrentPlayer().isVirtualUser()) {
 				card = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(), maumau,
 						mostRecentCard);
+				
+				if(card == null) {
+					this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
+					this.persist(this.maumau, this.handler);
+					break;
+				}
+					
 				for (Card c : this.maumau.getCurrentPlayer().getHand()) {
 					System.out.println(c.getSymbol().toString() + " " + c.getValue().toString());
 				}
 				System.out.println("playedCard: " + card.getSymbol().toString() + " " + card.getValue().toString());
 			} else {
-				int index = this.userCommunication.askForCardUserWantsToPlay(this.maumau.getCurrentPlayer());
-				card = this.userService.playCard(index, this.maumau.getCurrentPlayer());
+				Integer index = this.userCommunication.askForCardUserWantsToPlay(this.maumau.getCurrentPlayer());
+				
+				if(index != null && index != -1) {
+					card = this.userService.playCard(index, this.maumau.getCurrentPlayer());
+					
+				}else {
+					this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
+					this.persist(this.maumau, this.handler);
+					break;
+				}
+				
 			}
 			if (this.rulesService.checkIsValid(mostRecentCard, card, this.maumau.getUserwish(),
 					this.maumau.getRuleSet())) {
@@ -292,12 +309,12 @@ public class GameController implements GameUI {
 					this.maumau.setAmountSeven(0);
 					this.persist(this.maumau, this.handler);
 
-				} else if (this.rulesService.isSeven(card, this.maumau.getRuleSet())) {
+				} /*else if (this.rulesService.isSeven(card, this.maumau.getRuleSet())) {
 					// valid = true;
 					this.maumau.setAmountSeven(this.maumau.getAmountSeven() + 1);
 					this.persist(this.maumau, this.handler);
 
-				}
+				}*/
 
 				if (this.rulesService.isBube(card, this.maumau.getRuleSet())) {
 					Symbol symbol = null;
@@ -313,10 +330,13 @@ public class GameController implements GameUI {
 					this.maumau.setUserwish(symbol);
 					this.persist(this.maumau, this.handler);
 
-				} /*else if (this.rulesService.isSeven(card, this.maumau.getRuleSet())) {
+				}else if (this.rulesService.isSeven(card, this.maumau.getRuleSet())) {
 					this.maumau.setAmountSeven(this.maumau.getAmountSeven() + 1);
 					this.persist(this.maumau, this.handler);
-				}*/
+				}
+				
+				this.maumau = mauMauService.playCardProcedure(this.maumau, card);
+				this.persist(this.maumau, this.handler);
 			}
 			// valid = ruleservice.validCardOrNotValidCard(mostRecentCard, card,
 			// this.maumau.getUserwish(), mauMauRules);
@@ -324,7 +344,7 @@ public class GameController implements GameUI {
 				userInformation.informAboutMissingPermissionForUsersAction();
 			}
 		}
-		return card;
+		//return card;
 	}
 
 	/**

@@ -90,17 +90,28 @@ public class UserCommunication {
 	 * @param user the user
 	 * @return the int
 	 */
-	public int askForCardUserWantsToPlay(CardGameUser user) {
+	public Integer askForCardUserWantsToPlay(CardGameUser user) {
 		boolean cardInHand = false;
-		int index = 1;
+		String sIndex = "";
+		Integer index = null;
 		
 		System.out.println(user.getUsername() + ", which of your cards would you like to play?");
 		userInformation.giveCurrentCardDeckInfo(user.getHand());			
-		System.out.println("Please type the Index of the card you would like to play:");
 		
-		while(!cardInHand) {
+		
+		do {			
+			System.out.println("Please type the Index of the card you would like to play or press t to take a card:");
+			sIndex = input.nextLine();
+			if (sIndex.matches("[0-9]+") && (Integer.parseInt(sIndex) >= 0 || Integer.parseInt(sIndex) <user.getHand().size()))
+				index = Integer.parseInt(sIndex);
+			
+			if(sIndex.equalsIgnoreCase("t"))
+				index = -1;
+
+		} while ( index == null );
+		/*while(!cardInHand) {
 			try {
-				index = input.nextInt();
+				sIndex = input.nextInt();
 				input.nextLine();
 				if(index >= 0 && index <= user.getHand().size()-1) {
 					cardInHand = true;
@@ -111,7 +122,7 @@ public class UserCommunication {
 				System.out.println("Invalid input. Please type the index of the card you want to play:");
 				input.nextLine();
 			}
-		}
+		}*/
 
 		return index;
 	}
