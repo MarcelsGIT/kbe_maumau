@@ -74,11 +74,11 @@ public class RulesMgmt implements RulesService {
 			valid = true;
 		}else if( rules.isJackOnEverything() && userCard.getValue() == Value.JACK && !(lastCard.getValue() == Value.JACK) ) {
 			valid = true;
-		}else if( lastCard.getSymbol() == userCard.getSymbol() ) {
+		}else if(userWish != null && userCard.getSymbol() == userWish && !(userCard.getValue() == Value.JACK)) {
+			valid = true;
+		}else if( lastCard.getSymbol() == userCard.getSymbol() && userWish == null ) {
 			valid = true;
 		}else if(lastCard.getValue() == userCard.getValue() && !(lastCard.getValue() == Value.JACK)) {
-			valid = true;
-		}else if(userWish != null && userCard.getSymbol() == userWish && !(userCard.getValue() == Value.JACK)) {
 			valid = true;
 		}
 		return valid;
