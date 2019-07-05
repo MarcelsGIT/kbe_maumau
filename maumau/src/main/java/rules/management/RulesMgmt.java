@@ -169,12 +169,18 @@ public class RulesMgmt implements RulesService {
 	 */
 	public boolean checkIfUserCanPlay(int amountSeven, MauMauRules rules, Card mostRecentCard, List<Card> userCards, Symbol userWish) {
 		boolean canPlay = false;
-		if (isSeven(mostRecentCard, rules) && amountSeven>0) {
+		/*if (isSeven(mostRecentCard, rules) && amountSeven>0) {
 			canPlay = checkIfUserHasSeven(userCards);
 		} else if (isBube(mostRecentCard, rules)) {
 			canPlay = checkIfUserHasWishedSymbol(userCards, userWish);
 		} else {
 			canPlay = checkIfUserHasFittingCard(userCards, mostRecentCard, userWish, rules);
+		}*/
+		for(Card card : userCards) {
+			if(this.checkIsValid(mostRecentCard, card, userWish, rules)) {
+				canPlay =  true;
+				break;
+			}	
 		}
 		return canPlay;
 
