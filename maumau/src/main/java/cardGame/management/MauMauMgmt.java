@@ -292,7 +292,7 @@ private RulesService rulesService;
 		public MauMau giveAllCardsToUserThatUserHasToTake(MauMau maumau)throws NoMoreCardsException {
 			this.ensureServicesAvailability();
 			if (maumau.getAmountSeven() > 0) {
-				for (int i = 0; i < 2 * maumau.getAmountSeven(); i++) {
+				for (int i = 0; i < maumau.getRuleSet().getPenaltyOnSeven() * maumau.getAmountSeven(); i++) {
 					maumau = giveCardToUser(maumau);
 				}
 			} else {

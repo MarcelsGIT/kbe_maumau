@@ -60,9 +60,9 @@ public class UserInformation {
 	 */
 	public void giveCurrentCardDeckInfo(List<Card> userCards) {
 		int i = 0;
-		System.out.println("Your current hand contains the following cards:");
+		System.out.println("\nYour current hand contains the following cards:\n");
 		for (Card card : userCards) {
-			System.out.println("[" + i + "] " + card.getValue().toString() + " " + card.getSymbol().toString());
+			System.out.println("\t[" + i + "] " + card.getValue().toString() + " " + card.getSymbol().toString());
 			i++;
 		}
 	}

@@ -70,15 +70,17 @@ public class RulesMgmt implements RulesService {
 	 */
 	public boolean checkIsValid(Card lastCard, Card userCard, Symbol userWish, MauMauRules rules) {
 		boolean valid = false;
-		if( rules.isJackOnJack() && (lastCard.getValue() == Value.JACK && userCard.getValue() == Value.JACK) ) {
+		if( rules.isJackOnJack() && (lastCard.getValue() == Value.JACK && userCard.getValue() == Value.JACK )) {
 			valid = true;
-		}else if( rules.isJackOnEverything() && userCard.getValue() == Value.JACK && !(lastCard.getValue() == Value.JACK) ) {
+		}else if( rules.isJackOnEverything() && userCard.getValue() == Value.JACK && !(lastCard.getValue() == Value.JACK )) {
 			valid = true;
-		}else if(userWish != null && userCard.getSymbol() == userWish && !(userCard.getValue() == Value.JACK)) {
+		}else if( userWish != null && userCard.getSymbol() == userWish && !(userCard.getValue() == Value.JACK )) {
 			valid = true;
 		}else if( lastCard.getSymbol() == userCard.getSymbol() && userWish == null ) {
 			valid = true;
-		}else if(lastCard.getValue() == userCard.getValue() && !(lastCard.getValue() == Value.JACK)) {
+		}else if( rules.isPlayAfterPenalty() && lastCard.getValue() == Value.SEVEN && userCard.getValue() == Value.SEVEN ) {
+			valid = true;
+		}else if(lastCard.getValue() == userCard.getValue() && !(lastCard.getValue() == Value.JACK) && !(lastCard.getValue() == Value.SEVEN)) {
 			valid = true;
 		}
 		return valid;

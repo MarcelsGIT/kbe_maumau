@@ -100,13 +100,16 @@ public class UserCommunication {
 		
 		
 		do {			
-			System.out.println("Please type the Index of the card you would like to play or press t to take a card:");
+			System.out.println("\nPlease type in the index of the card you would like to play, press \"t\" to take a card or \"q\" to quit the game:");
 			sIndex = input.nextLine();
 			if (sIndex.matches("[0-9]+") && (Integer.parseInt(sIndex) >= 0 || Integer.parseInt(sIndex) <user.getHand().size()))
 				index = Integer.parseInt(sIndex);
 			
 			if(sIndex.equalsIgnoreCase("t"))
 				index = -1;
+			
+			if(sIndex.equalsIgnoreCase("q"))
+				index = -99;
 
 		} while ( index == null );
 		/*while(!cardInHand) {

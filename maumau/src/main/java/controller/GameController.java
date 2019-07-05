@@ -94,18 +94,29 @@ public class GameController implements GameUI {
 
 			if (selectedGame != null) {
 				this.maumau = selectedGame;
+				this.maumau.setEndGame(false);
+				this.maumau.setPlayAgain(false);
+				if(userNames.size() < selectedGame.getPlayers().size()) {
+					for(MauMauUser user : selectedGame.getPlayers()) {
+						if(!userNames.contains(user.getUsername()))
+							user.setVirtualUser(true);
+					}
+				}
 			} else {
 				this.maumau = mauMauService.handleGameStart(userNames, rules, 5);
 
 			}
+			
+			this.maumau = this.welcomeGame.configureGame(this.maumau);
+			this.persist(this.maumau, handler);
 
 			while (this.maumau.isEndGame() == false) {
 
 				Card mostRecentCard = cardDeckService.giveMostRecentCard(this.maumau.getGraveyard());
 
-				userInformation.giveCurrentTopCardInfo(mostRecentCard);
 				userInformation.giveInfoAboutCurrentPlayer(this.maumau.getCurrentPlayer());
-
+				userInformation.giveCurrentTopCardInfo(mostRecentCard);
+				
 				if (!rulesService.checkIfUserCanPlay(maumau.getAmountSeven(), rules, mostRecentCard,
 						maumau.getCurrentPlayer().getHand(), maumau.getUserwish())) {
 					userInformation.informAboutCardsThatWereTaken(this.maumau.getAmountSeven());
@@ -282,9 +293,13 @@ public class GameController implements GameUI {
 			} else {
 				Integer index = this.userCommunication.askForCardUserWantsToPlay(this.maumau.getCurrentPlayer());
 				
-				if(index != null && index != -1) {
+				if(index != null && index != -1 && index != -99) {
 					card = this.userService.playCard(index, this.maumau.getCurrentPlayer());
-					
+				
+				}else if(index == -99) {
+					this.maumau.setEndGame(true);
+					this.maumau.setPlayAgain(true);
+					break;
 				}else {
 					this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
 					this.persist(this.maumau, this.handler);
@@ -305,7 +320,7 @@ public class GameController implements GameUI {
 				}*/else if (maumau.getAmountSeven() > 0 && !this.rulesService.isSeven(card, this.maumau.getRuleSet())
 						&& mostRecentCard.getSymbol() == card.getSymbol()) {
 					// valid = true;
-					this.maumau = this.mauMauService.dealPenaltyCards(this.maumau.getAmountSeven() * 2, this.maumau);
+					this.maumau = this.mauMauService.dealPenaltyCards(this.maumau.getAmountSeven() * this.maumau.getRuleSet().getPenaltyOnSeven(), this.maumau);
 					this.maumau.setAmountSeven(0);
 					this.persist(this.maumau, this.handler);
 

@@ -24,10 +24,14 @@ public class MauMauRules {
 	private Integer id;
 	
 	//@Autowired
-	private boolean jackOnJack;
+	private boolean jackOnJack = false;
 	
 	//@Autowired
-	private boolean jackOnEverything;
+	private boolean jackOnEverything = false;
+	
+	private boolean playAfterPenalty = true;
+	
+	private int penaltyOnSeven = 2;
 	
 	/**
 	 * Instantiates a new mau mau rules.
@@ -43,6 +47,22 @@ public class MauMauRules {
 	 */
 	public boolean isJackOnJack() {
 		return jackOnJack;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public int getPenaltyOnSeven() {
+		return penaltyOnSeven;
+	}
+
+	public void setPenaltyOnSeven(int penaltyOnSeven) {
+		this.penaltyOnSeven = penaltyOnSeven;
 	}
 
 	/**
@@ -72,8 +92,18 @@ public class MauMauRules {
 		this.jackOnEverything = jackOnEverything;
 	}
 	
-	
-	
-	
+	public boolean isPlayAfterPenalty() {
+		return playAfterPenalty;
+	}
 
+	public void setPlayAfterPenalty(boolean playAfterPenalty) {
+		this.playAfterPenalty = playAfterPenalty;
+	}
+
+	public void setDefaultRules() {
+		this.setJackOnEverything(false);
+		this.setJackOnJack(false);
+		this.setPenaltyOnSeven(2);
+		this.setPlayAfterPenalty(true);
+	}
 }
