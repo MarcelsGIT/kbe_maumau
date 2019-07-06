@@ -42,7 +42,7 @@ public interface RulesService {
 	 * @param maumau
 	 * @return the card that the user wishes
 	 */
-	boolean checkIsValid(Card lastCard, Card userCard, Symbol userWish, MauMauRules mauMauRules);
+	boolean checkIsValid(Card lastCard, Card userCard, Symbol userWish, int amountSeven, MauMauRules mauMauRules);
 	
 	
 	/**

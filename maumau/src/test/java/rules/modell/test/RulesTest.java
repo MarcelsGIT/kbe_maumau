@@ -41,13 +41,13 @@ public class RulesTest {
 	
 	@Test
 	public void testPositiveNextCardValidation() {
-		boolean isValid = this.rulesMgmt.checkIsValid(this.cards.get(3), this.cards.get(0), Symbol.CLUB, rules);
+		boolean isValid = this.rulesMgmt.checkIsValid(this.cards.get(3), this.cards.get(0), Symbol.CLUB, 0, rules);
 		assertTrue(isValid);
 	}
 	
 	@Test
 	public void testNegativeNextCardValidation() {
-		boolean isValid = this.rulesMgmt.checkIsValid(this.cards.get(3), this.cards.get(4), Symbol.CLUB, rules);
+		boolean isValid = this.rulesMgmt.checkIsValid(this.cards.get(3), this.cards.get(4), Symbol.CLUB, 0, rules);
 		assertFalse(isValid);
 		
 	}
@@ -55,14 +55,14 @@ public class RulesTest {
 	@Test
 	public void testJackOnJackPositive() {
 		this.rules.setJackOnJack(true);
-		boolean isValid = this.rulesMgmt.checkIsValid(this.cards.get(2), this.cards.get(5), Symbol.HEART, rules);
+		boolean isValid = this.rulesMgmt.checkIsValid(this.cards.get(2), this.cards.get(5), Symbol.HEART, 0, rules);
 		assertTrue(isValid);
 	}
 	
 	@Test
 	public void testJackOnJackNegative() {
 		this.rules.setJackOnJack(false);
-		boolean isValid = this.rulesMgmt.checkIsValid(this.cards.get(2), this.cards.get(5), Symbol.HEART, rules);
+		boolean isValid = this.rulesMgmt.checkIsValid(this.cards.get(2), this.cards.get(5), Symbol.HEART, 0, rules);
 		assertFalse(isValid);
 	}
 	
@@ -70,7 +70,7 @@ public class RulesTest {
 	public void testJackOnEverythingPositive() {
 		this.rules.setJackOnEverything(true);
 		this.rules.setJackOnJack(false);
-		boolean isValid = this.rulesMgmt.checkIsValid(this.cards.get(4), this.cards.get(5), Symbol.HEART, rules);
+		boolean isValid = this.rulesMgmt.checkIsValid(this.cards.get(4), this.cards.get(5), Symbol.HEART, 0, rules);
 		assertTrue(isValid);
 	}
 	
@@ -78,7 +78,7 @@ public class RulesTest {
 	public void testJackOnEverythingNegative() {
 		this.rules.setJackOnEverything(false);
 		this.rules.setJackOnJack(false);
-		boolean isValid = this.rulesMgmt.checkIsValid(this.cards.get(4), this.cards.get(5), Symbol.HEART, rules);
+		boolean isValid = this.rulesMgmt.checkIsValid(this.cards.get(4), this.cards.get(5), Symbol.HEART, 0, rules);
 		assertFalse(isValid);
 	}
 	
@@ -122,7 +122,7 @@ public class RulesTest {
 	public void testCheckIsValidCardNotValid() {
 		Card lastCard = new Card(Symbol.CLUB, Value.ACE);
 		Card userCard = new Card(Symbol.DIAMOND, Value.EIGHT);
-		boolean valid = rulesMgmt.checkIsValid(lastCard, userCard, Symbol.HEART, rules);
+		boolean valid = rulesMgmt.checkIsValid(lastCard, userCard, Symbol.HEART, 0, rules);
 		assertFalse(valid);
 	}
 	
@@ -130,7 +130,7 @@ public class RulesTest {
 	public void testCheckIsValidCardValidSameValue() {
 		Card lastCard = new Card(Symbol.CLUB, Value.ACE);
 		Card userCard = new Card(Symbol.HEART, Value.ACE);
-		boolean valid = rulesMgmt.checkIsValid(lastCard, userCard, Symbol.HEART, rules);
+		boolean valid = rulesMgmt.checkIsValid(lastCard, userCard, Symbol.HEART, 0, rules);
 		assertTrue(valid);
 	}
 	
@@ -138,7 +138,7 @@ public class RulesTest {
 	public void testCheckIsValidCardValidSameSymbol() {
 		Card lastCard = new Card(Symbol.CLUB, Value.ACE);
 		Card userCard = new Card(Symbol.CLUB, Value.EIGHT);
-		boolean valid = rulesMgmt.checkIsValid(lastCard, userCard, Symbol.CLUB, rules);
+		boolean valid = rulesMgmt.checkIsValid(lastCard, userCard, Symbol.CLUB, 0, rules);
 		assertTrue(valid);
 	}
 	

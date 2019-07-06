@@ -143,8 +143,8 @@ public class GameController implements GameUI {
 					this.persist(this.maumau, this.handler);
 
 					// User plays card here:
-					Card validCard = null;
-					if (!maumau.getCurrentPlayer().isVirtualUser()) {
+					
+					//if (!maumau.getCurrentPlayer().isVirtualUser()) {
 						//userInformation.giveCurrentCardDeckInfo(this.maumau.getCurrentPlayer().getHand());
 						try {
 							/*String playOrTake = userCommunication.askIfPlayCardOrTakeCard();
@@ -166,8 +166,15 @@ public class GameController implements GameUI {
 							// tries to draw cards although all cards are already drawn7
 							if (rulesService.checkIfUserCanPlay(maumau.getAmountSeven(), rules, mostRecentCard,
 									maumau.getCurrentPlayer().getHand(), maumau.getUserwish())) {
-								validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(),
+								Card validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(),
 										maumau, mostRecentCard);
+								
+								if(validCard == null) {
+									this.maumau = mauMauService.nextPlayer(this.maumau);
+									this.persist(this.maumau, this.handler);
+									continue;
+								}
+									
 								this.maumau = mauMauService.playCardProcedure(maumau, validCard);
 								this.maumau.setAmountSeven(0);
 								this.persist(this.maumau, this.handler);
@@ -177,7 +184,7 @@ public class GameController implements GameUI {
 //							
 //							
 //						}
-					} else if (maumau.getCurrentPlayer().isVirtualUser()) {
+					/*} else if (maumau.getCurrentPlayer().isVirtualUser()) {
 						// validCard =
 						// virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(),
 						// maumau,
@@ -191,7 +198,7 @@ public class GameController implements GameUI {
 						//		: mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
 
 						//this.persist(this.maumau, this.handler);
-					}
+					}*/
 
 					// Checks if the user has won:
 					if (this.maumau.getCurrentPlayer().getHand().size() == 0
@@ -208,16 +215,16 @@ public class GameController implements GameUI {
 					}
 
 					// AFTER Card was played or taken
-					this.lastPlayer = this.maumau.getCurrentPlayer();
+					//this.lastPlayer = this.maumau.getCurrentPlayer();
 					// Card playedCard =
 					// cardDeckService.giveMostRecentCard(this.maumau.getGraveyard());
 
-					if (validCard != null && rulesService.isEight(validCard, this.maumau.getRuleSet())) {
+					/*if (validCard != null && rulesService.isEight(validCard, this.maumau.getRuleSet())) {
 						this.maumau = mauMauService.skipRound(lastPlayer, this.maumau);
 						this.persist(this.maumau, this.handler);
 						MauMauUser userWhoHastToSkipRound = this.maumau.getCurrentPlayer();
 						userInformation.giveSkipRoundInfo(userWhoHastToSkipRound);
-					}
+					}*/
 
 					// If card was played
 					/*
@@ -293,21 +300,21 @@ public class GameController implements GameUI {
 			} else {
 				Integer index = this.userCommunication.askForCardUserWantsToPlay(this.maumau.getCurrentPlayer());
 				
-				if(index != null && index != -1 && index != -99) {
+				if(index != null && index != -1 && index != -99 && index >= 0 && index < this.maumau.getCurrentPlayer().getHand().size()) {
 					card = this.userService.playCard(index, this.maumau.getCurrentPlayer());
 				
 				}else if(index == -99) {
 					this.maumau.setEndGame(true);
 					this.maumau.setPlayAgain(true);
 					break;
-				}else {
+				}else if(index == -1){
 					this.maumau = mauMauService.giveAllCardsToUserThatUserHasToTake(maumau);
 					this.persist(this.maumau, this.handler);
 					break;
 				}
 				
 			}
-			if (this.rulesService.checkIsValid(mostRecentCard, card, this.maumau.getUserwish(),
+			if (card != null && this.rulesService.checkIsValid(mostRecentCard, card, this.maumau.getUserwish(), this.maumau.getAmountSeven(),
 					this.maumau.getRuleSet())) {
 				valid = true;
 				if (this.maumau.getUserwish() != null
@@ -352,11 +359,19 @@ public class GameController implements GameUI {
 				
 				this.maumau = mauMauService.playCardProcedure(this.maumau, card);
 				this.persist(this.maumau, this.handler);
+				
+				if (card != null && rulesService.isEight(card, this.maumau.getRuleSet())) {
+					this.maumau = mauMauService.skipRound(this.maumau.getCurrentPlayer(), this.maumau);
+					this.persist(this.maumau, this.handler);
+					MauMauUser userWhoHastToSkipRound = this.maumau.getCurrentPlayer();
+					userInformation.giveSkipRoundInfo(userWhoHastToSkipRound);
+				}
 			}
 			// valid = ruleservice.validCardOrNotValidCard(mostRecentCard, card,
 			// this.maumau.getUserwish(), mauMauRules);
 			if (valid == false) {
 				userInformation.informAboutMissingPermissionForUsersAction();
+				userInformation.giveCurrentTopCardInfo(mostRecentCard);
 			}
 		}
 		//return card;
