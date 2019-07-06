@@ -2,7 +2,6 @@ package rules;
 
 import java.util.List;
 
-import cardGame.modell.MauMau;
 import cards.modell.Card;
 import cards.modell.Symbol;
 import rules.modell.MauMauRules;

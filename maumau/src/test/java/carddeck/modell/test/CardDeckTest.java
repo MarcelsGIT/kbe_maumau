@@ -1,7 +1,7 @@
 package carddeck.modell.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +16,7 @@ import cards.modell.Card;
 import cards.modell.CardDeck;
 import cards.modell.Symbol;
 import cards.modell.Value;
+import util.exceptions.NoMoreCardsException;
 
 public class CardDeckTest {
 	
@@ -68,8 +69,10 @@ public class CardDeckTest {
 
 	@Test
 	void testDealCardsCardDeckNotHavingEnoughCards() {
-		cardDeckImpl.dealCards(cardDeck, cardDeck.getCards().size() + 1, graveyard);
-		assertEquals(cardDeck.getCards().size(), graveyard.getCards().size());
+		
+		assertThrows(NoMoreCardsException.class, () -> {
+			cardDeckImpl.dealCards(cardDeck, cardDeck.getCards().size() + 1, graveyard);
+		});
 	}
 	/*
 	@Test
@@ -97,8 +100,11 @@ public class CardDeckTest {
 	void testGiveCardNotHavingEnoughCards() {
 		List<Card> emptyList = new LinkedList<Card>();
 		cardDeck.setCards(emptyList);
-		Card givenCard = cardDeckImpl.giveCard(cardDeck, graveyard);
-		assertEquals(givenCard.getValue(), graveyard.getCards().get(0).getValue());
+		//Card givenCard = 
+		//assertEquals(givenCard.getValue(), graveyard.getCards().get(0).getValue());
+		assertThrows(NoMoreCardsException.class, () -> {
+			cardDeckImpl.giveCard(cardDeck, graveyard);
+		});
 	}
 	
 	@Test
@@ -113,7 +119,7 @@ public class CardDeckTest {
 	List <Card> emptyCardList = new LinkedList <Card>();
 	cardDeck.setCards(emptyCardList);
 	CardDeck cardDeckWithGraveyardCards = cardDeckImpl.addCardsFromGraveyard(cardDeck, graveyard);
-	assertEquals(cardDeckWithGraveyardCards.getCards().get(0), graveyard.getCards().get(0));
+	assertEquals(cardDeckWithGraveyardCards.getCards().isEmpty(), graveyard.getCards().isEmpty());
 	
 	}
 	

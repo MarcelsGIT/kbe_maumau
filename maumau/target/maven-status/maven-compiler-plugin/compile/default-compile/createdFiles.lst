@@ -28,6 +28,7 @@ persistence\modell\JPAHandler.class
 cards\CardDeckService.class
 main\App.class
 userAdministration\modell\MauMauUser.class
+util\exceptions\NoMoreCardsException.class
 cards\management\CardDeckImpl.class
 persistence\PersistenceService.class
 util\exceptions\ICustomException.class

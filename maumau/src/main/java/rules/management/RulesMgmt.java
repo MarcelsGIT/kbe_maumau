@@ -1,7 +1,6 @@
 package rules.management;
 
 import cards.modell.Card;
-import cards.CardDeckService;
 import cards.modell.Symbol;
 import cards.modell.Value;
 import rules.RulesService;
@@ -12,7 +11,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import cardGame.modell.MauMau;
 
 // TODO: Auto-generated Javadoc
 /**

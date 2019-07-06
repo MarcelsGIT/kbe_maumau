@@ -9,7 +9,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import cardGame.modell.MauMau;
 import cards.modell.Card;
 import cards.modell.Symbol;
 import cards.modell.Value;
@@ -208,7 +207,7 @@ public class RulesTest {
 		LinkedList <Card> userCards = new LinkedList <Card>();
 		userCards.add(new Card(Symbol.CLUB, Value.EIGHT));
 		boolean canPlay = rulesMgmt.checkIfUserCanPlay(0, rules, lastCard, userCards, Symbol.DIAMOND);
-		assertTrue(canPlay);
+		assertFalse(canPlay);
 	}
 	
 	@Test
@@ -217,7 +216,7 @@ public class RulesTest {
 		LinkedList <Card> userCards = new LinkedList <Card>();
 		userCards.add(new Card(Symbol.DIAMOND, Value.EIGHT));
 		boolean canPlay = rulesMgmt.checkIfUserCanPlay(0, rules, lastCard, userCards, Symbol.DIAMOND);
-		assertFalse(canPlay);
+		assertTrue(canPlay);
 	}
 	
 	@Test
@@ -288,7 +287,7 @@ public class RulesTest {
 	Card lastCard = new Card(Symbol.CLUB, Value.ACE);
 	Card playedCard = new Card(Symbol.DIAMOND, Value.ACE);
 	boolean validCard = rulesMgmt.validCardOrNotValidCard(lastCard, playedCard,  Symbol.CLUB, rules);
-	assertTrue(validCard);
+	assertFalse(validCard);
 	}
 	
 	@Test
