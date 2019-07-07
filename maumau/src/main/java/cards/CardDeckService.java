@@ -7,67 +7,81 @@ import cards.modell.CardDeck;
 
 public interface CardDeckService {
 
-	
-	
 	/**
-	 * Creates Cards for the game
+	 * Creates Cards
+	 * 
 	 * @return List with cards
 	 */
-	 List<Card> createCards();
-	 
-	 CardDeck createCardDeck(List<Card> cardsList);
-	
+	List<Card> createCards();
+
 	/**
-	 * Saves the card that was played by the user to the deck
+	 * Creates a CardDeck
 	 * 
-	 * @param card The card that was played by the user
+	 * @param cardsList
+	 * @return CardDeck
 	 */
-	CardDeck saveCardToCardDeck(CardDeck cardDeck, Card ... card);
-	
+	CardDeck createCardDeck(List<Card> cardsList);
+
 	/**
-	 * Deals a set of cards to the player
+	 * Saves a card to the deck
 	 * 
+	 * @param card: Card to be saved
+	 * @return CardDeck: cardDeck with additional card
+	 */
+	CardDeck saveCardToCardDeck(CardDeck cardDeck, Card... card);
+
+	/**
+	 * Deals a the specified amounts of cards from the CardDeck, if amount in
+	 * CardDeck not enough, then cards from graveyard are used
 	 * @param amount Amount of cards that should be dealt
-	 * @return A list of cards that are given to the user
+	 * @param cardDeck: cardDeck to deal cards from
+	 * @param graveyard: backup cards if cardDeck cards are not enough
+	 * @return cardList: List of cards that were dealt
 	 */
 	List<Card> dealCards(CardDeck cardDeck, int amount, CardDeck graveyard);
-	
+
+
 	/**
-	 * Shuffle the cards
+	 * Shuffles the cards in the cardDeck
+	 * @param cardDeck
+	 * @return cardList: shuffled list
 	 */
 	List<Card> shuffle(CardDeck cardDeck);
-	
+
 	/**
-	 * Give a card from the deck to the user
-	 * 
-	 * @return top card from deck
+	 * Gives a card from the cardDeck
+	 * @param cardDeck: cardDeck to give card from
+	 * @param graveyard backup cards if cardDeck cards are not enough
+	 * @return card: top card from deck
 	 */
 	Card giveCard(CardDeck cardDeck, CardDeck graveyard);
-	
+
 	/**
-	 * Show, which card was most recently played 
-	 * 
-	 * @return The last card from the Graveyard / Ablagestapel
+	 * Gives the top card on CardDeck
+	 * @param cardDeck: carDeck to give top card from
+	 * @return card: top card of cardDeck
 	 */
 	Card giveMostRecentCard(CardDeck cardDeck);
-	
-	
+
 	/**
-	 * @param cardDeck cardDeck that needs new cards
-	 * @param graveyard graveyard to fill up cardDeck cardList
-	 * @return cardDeck with cards from graveyard
+	 * Adds cards from other cardDeck to cardDeck
+	 * @param cardDeck:  cardDeck that needs new cards
+	 * @param graveyard: CardDeck graveyard to fill up cardDeck cardList
+	 * @return cardDeck: CardDeck with cards from graveyard
 	 */
 	CardDeck addCardsFromGraveyard(CardDeck cardDeck, CardDeck graveyard);
-	
+
 	/**
-	 * @param cardDeck to remove cards from
-	 * @param cardsToBeRemoved cards to be removes from cardDeck cardList
-	 * @return cardDeck without the cards
+	 * Removes specified cards from cardDeck
+	 * @param cardDeck: cardDeck to remove cards from
+	 * @param cardsToBeRemoved cards to be removed from cardDeck cardList
+	 * @return cardDeck without the cards that were reomved
 	 */
-	CardDeck removeCardsFromCardDeckList(CardDeck cardDeck, List <Card> cardsToBeRemoved);
-	
+	CardDeck removeCardsFromCardDeckList(CardDeck cardDeck, List<Card> cardsToBeRemoved);
+
 	/**
-	 * @param cardDeck 
+	 * Removes specified card from CardDeck
+	 * @param cardDeck
 	 * @param card to be removed
 	 * @return cardDeck without card
 	 */

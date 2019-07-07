@@ -15,7 +15,6 @@ public interface MauMauService {
 	
 	/**
 	 * Starts the game
-	 * 
 	 * @param userList All the players that are in the game
 	 * @param RuleSet All specified rules
 	 * @param cardDeck The initial card deck
@@ -28,62 +27,57 @@ public interface MauMauService {
 	
 	/**
 	 * Specifies which user starts the game
-	 * 
-	 * @param userList All Users that are in the game
-	 * @return the user that will begin
+	 * @param mauMau: game with userList
+	 * @return mauMau: with the user that starts as current player
 	 */
 	MauMau chooseWhoStarts(MauMau mauMau);
 	
 	
 	/**
-	 * The next player
+	 * Defines the next player
+	 * @param mauMau: mauMau with userlist 
+	 * @return mauMau: with next player as current player
 	 */
 	MauMau nextPlayer(MauMau mauMau); 
 	
 	
 	
-	/** Ends the game
-	 * 
-	 * @param game The current Mau-Mau game
-	 * @return true if game should be ended 
+	/** 
+	 * Ends the game
+	 * @param mauMau game that should be or not ended
+	 * @return MauMau mauMau with field endGame set true if game should be ended, fals otherwise
 	 */
 	MauMau endGame(MauMau mauMau, boolean endGame);
 	
 	
-	/** Save the winner to the database
-	 * 
-	 * @param user The User that won the game
+	/** Saves the winner in the mauMau object
+	 * @param user: The user that won the game
+	 * @return mauMau: mauMau with winner
 	 */
 	MauMau insertWinner(MauMauUser user, MauMau mauMau);
 	
 	
-	/** Skips the user for this round
-	 * 
+	/** 
+	 * Skips the user for this round
 	 * @param user The user that has to skip the round
-	 * @param maumau 
+	 * @param mauMau with current player the player after the one that had to skip the round
 	 */
 	 MauMau skipRound(MauMauUser user, MauMau mauMau);
 
 	
 	/**
-	 * Deal penalty cards to user
-	 * 
-	 * @return The user's new hand 
+	 * Deals all the penalty cards to the user that the user has to take
+	 * @return mauMau: The game with the new amount of cards in the current's players hand
 	 */
 	MauMau dealPenaltyCards(int amount, MauMau mauMau);
-	
-	
-	
-	////Ab hier Tests!
-
-	
+		
 	
 	/**
 	 * Deals Cards to players
 	 * @param maumau
 	 * @param amountCards
 	 * @param cardDeckService
-	 * @return maumau
+	 * @return mauMau: game with cards that were dealed to players
 	 */
 	MauMau dealCardsToPlayers(MauMau maumau, int amountCards);
 	
@@ -94,7 +88,7 @@ public interface MauMauService {
 	 * @param maumau
 	 * @param cardDeckService
 	 * @param userService
-	 * @return MauMau
+	 * @return mauMau: game with current user hand size plus one card
 	 */
 	MauMau giveCardToUser(MauMau maumau);
 	
@@ -103,7 +97,7 @@ public interface MauMauService {
 	 * @param maumau
 	 * @param cardDeckService
 	 * @param userService
-	 * @return MauMau
+	 * @return MauMau: game with current player's hand that contains the additional cards
 	 */
 	MauMau giveAllCardsToUserThatUserHasToTake(MauMau maumau);
 	
@@ -112,7 +106,7 @@ public interface MauMauService {
 	 * @param maumau
 	 * @param cardDeckService
 	 * @param validCard
-	 * @return MauMau
+	 * @return mauMau: game with one card less in current user's hand
 	 */
 	MauMau playCardProcedure(MauMau maumau, Card validCard);
 	
@@ -121,7 +115,7 @@ public interface MauMauService {
 	 *Sets mau or not depending on boolean mau
 	 * @param maumau
 	 * @param mau
-	 * @return maumau
+	 * @return mauMau: game with current player's mau set or not set 
 	 */
 	MauMau shoutMauProcedure(MauMau maumau, boolean mau);
 	
@@ -129,7 +123,7 @@ public interface MauMauService {
 	 * Sets mauMau or not depending on boolean shoutMaumau
 	 * @param maumau
 	 * @param shoutMaumau
-	 * @return Maumau
+	 * @return Maumau: game with current player's mauMau set or not set 
 	 */
 	MauMau shoutMauMauProcedure(MauMau maumau, boolean shoutMaumau);
 	
@@ -142,7 +136,7 @@ public interface MauMauService {
 	 * @param cardDeckService
 	 * @param rules
 	 * @param rulesService
-	 * @return MauMau
+	 * @return MauMau: game prepared for the game start
 	 */
 	MauMau handleGameStart(List<String> userNames, MauMauRules rules, int amountCardsForUser);
 
