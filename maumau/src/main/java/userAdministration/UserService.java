@@ -10,36 +10,43 @@ public interface UserService {
 
 	
 	/**
-	 * The card that the user plays
-	 * 
-	 * @return The card the user played
+	 * Gives the card that user wants to play
+	 * @param index: index of card to be played in user's cardList
+	 * @return Card: The card the user played
 	 */
 	Card playCard(int index, MauMauUser mauMauUser);
 	
 	/**
-	 * Take card from card deck
-	 * 
-	 * @param cards The card deck
-	 * @param user The user that takes from the card deck
-	 * @return 
+	 * Adds a card to user's hand
+	 * @param cardFromDeck: card to be added to user's card
+	 * @param user: the user that takes a card
+	 * @return MauMauUser: user with one more card in hand
 	 */
 	MauMauUser takeCard(Card cardFromDeck, MauMauUser mauMauUser);
 	
 	/**
-	 * 
-	 */
-	String shoutMau(MauMauUser mauMauUser);
-	
-	/** 
-	 * 
-	 */
-	String shoutMauMau(MauMauUser mauMauUser);
-	
-	/**
+	 * Creates users from userNames
 	 * @param userNames Names of users to be created
 	 * @return List with MauMauUsers
 	 */
 	List<MauMauUser> createUsers(List<String> userNames);
+	
+	/**
+	 * Lets user shout mau
+	 * @param mauMauUser:
+	 * @return string: maumau
+	 */
+	String shoutMau(MauMauUser mauMauUser);
+	
+	/** 
+	 * Lets user shout maumau
+	 * @param mauMauUser:
+	 * @return string: maumau
+	 * 
+	 */
+	String shoutMauMau(MauMauUser mauMauUser);
+	
+
 	
 	
 }
