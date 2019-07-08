@@ -36,6 +36,7 @@ public interface UserService {
 	 * @param mauMauUser:
 	 * @return string: maumau
 	 */
+	@Deprecated
 	String shoutMau(MauMauUser mauMauUser);
 	
 	/** 
@@ -44,6 +45,7 @@ public interface UserService {
 	 * @return string: maumau
 	 * 
 	 */
+	@Deprecated
 	String shoutMauMau(MauMauUser mauMauUser);
 	
 

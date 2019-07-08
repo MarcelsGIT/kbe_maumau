@@ -98,6 +98,7 @@ public interface RulesService {
 	 * @param mauMauRules
 	 * @return boolean if true if valid, false otherwise
 	 */
+	@Deprecated
 	boolean validCardOrNotValidCard(Card mostRecentCard, Card card, Symbol userwish, MauMauRules mauMauRules);
 
 	
