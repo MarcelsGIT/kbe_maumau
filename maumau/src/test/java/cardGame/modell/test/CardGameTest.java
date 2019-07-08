@@ -168,7 +168,7 @@ public class CardGameTest {
 	
 	
 	
-	/*@Test dieser test kann so auf keinen fall funktionieren.....
+	@Test 
 	public void testDealCardsToPlayers() {
 		MauMauUser mauMauUser3 = new MauMauUser("Superman", new LinkedList <Card> (), 0, true, false, false, false, false);
 		LinkedList <MauMauUser> users = new LinkedList <MauMauUser> ();
@@ -183,16 +183,14 @@ public class CardGameTest {
 		CardDeck cardDeck = new CardDeck();
 		cardDeck.setCards(cardGameCards);
 		CardDeck graveyard = new CardDeck();
-		//graveyard.setCards(cardGameCards);
+		graveyard.setCards(cardGameCards);
 		maumau.setDeck(cardDeck);
 		maumau.setGraveyard(graveyard);
-		when(cardDeckService.dealCards(cardDeck, 4, graveyard)).thenReturn(cardGameCards);
-		when(cardDeckService.removeCardsFromCardDeckList(cardDeck, cardGameCards)).thenReturn(cardDeck);
-		maumau = mauMauMgmt.dealCardsToPlayers(maumau, 4);
-		assertEquals(4, maumau.getPlayers().get(0).getHand().size());
+		when(cardDeckService.dealCards(cardDeck, 6, graveyard)).thenReturn(cards);
+		maumau = mauMauMgmt.dealCardsToPlayers(maumau, 6);
+		assertEquals(6, maumau.getPlayers().get(0).getHand().size());
 		
-		
-	}*/
+	}
 	
 	
 	

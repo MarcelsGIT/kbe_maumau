@@ -22,9 +22,9 @@ import virtualUserAdministration.management.VirtualUserMgmt;
 
 public class VirtualUserTest {
 	
-	VirtualUserService virtualUserService;
-	MauMau maumau;
-	List <MauMauUser> players;
+	private VirtualUserService virtualUserService;
+	private MauMau maumau;
+	private List <MauMauUser> players;
 	
 	@BeforeEach
 	public void init() {
