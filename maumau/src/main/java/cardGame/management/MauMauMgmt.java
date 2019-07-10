@@ -74,7 +74,6 @@ private RulesService rulesService;
 		 * @param mauMau the mau mau
 		 * @return the mau mau
 		 */
-		// Kaan
 		public MauMau chooseWhoStarts(MauMau mauMau) {
 			this.ensureServicesAvailability();
 			int randomIndex = (int) Math.random() * mauMau.getPlayers().size();
@@ -90,7 +89,6 @@ private RulesService rulesService;
 		 * @return the mau mau
 		 * @throws NoMoreCardsException the no more cards exception
 		 */
-		//Marcel
 		public MauMau transferCardsFromGraveyardToCardDeck(MauMau maumau)throws NoMoreCardsException {
 			if(maumau.getGraveyard().getCards().size() <= 1) {
 				throw new NoMoreCardsException();
@@ -119,7 +117,6 @@ private RulesService rulesService;
 		 * @param mauMau the mau mau
 		 * @return the mau mau
 		 */
-		// Marcel
 		public MauMau nextPlayer(MauMau mauMau) {
 			this.ensureServicesAvailability();
 			int nextPlayer = mauMau.getCurrentPlayerIndex() + 1;
@@ -153,7 +150,6 @@ private RulesService rulesService;
 		 * @param mauMau the mau mau
 		 * @return the mau mau
 		 */
-		// No need right now
 		public MauMau insertWinner(MauMauUser user, MauMau mauMau) {
 			this.ensureServicesAvailability();
 			mauMau.setWinner(user);
@@ -168,7 +164,6 @@ private RulesService rulesService;
 		 * @param mauMau the mau mau
 		 * @return the mau mau
 		 */
-		// Marcel
 		public MauMau skipRound(MauMauUser user, MauMau mauMau) {
 			this.ensureServicesAvailability();
 			// TODO Auto-generated method stub

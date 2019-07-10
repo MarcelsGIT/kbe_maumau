@@ -138,8 +138,8 @@ public class GameController implements GameUI {
 					} catch (NoMoreCardsException e) {
 						userInformation.noMoreCards();
 						// Inform user that the deck is out of cards
-						// virtual player plays for human player due to he is a dump asshole and
-						// tries to draw cards although all cards are already drawn7
+						// virtual player plays for human player becaus the user
+						// tries to draw cards although all cards are already drawn, therefore at least one user must be able to play
 						if (rulesService.checkIfUserCanPlay(maumau.getAmountSeven(), this.maumau.getRuleSet(), mostRecentCard,
 								maumau.getCurrentPlayer().getHand(), maumau.getUserwish())) {
 							Card validCard = virtualUserService.playNextPossibleCardFromHand(maumau.getCurrentPlayer(),

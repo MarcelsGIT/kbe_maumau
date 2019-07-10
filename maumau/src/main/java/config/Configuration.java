@@ -11,7 +11,6 @@ import view.GameUI;
  * The Class Configuration.
  */
 public class Configuration {
-	//immer das "oberste" package angeben! niemals z.B. cardGame.modell, stattdessen z.B. cardGame
 	private static ConfigurableApplicationContext container = new AnnotationConfigApplicationContext("controller", "cardGame", "cards", "rules", "userAdministration", "virtualUserAdministration", "view", "persistence");
 
 	/**
